@@ -1,3 +1,3 @@
-# ap_poll_rankings
+# Great Reads
 
-Track the college football ranking of the Univerisity of Texas and Texas A&M
+Making good reads better
