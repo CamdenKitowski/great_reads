@@ -3,27 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Great Reads</title>
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="styles.css">
+    <title>Book List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .book-entry {
+            display: flex;
+            flex-direction: column;
+        }
+        .book-details {
+            display: flex;
+            justify-content: space-between;
+        }
+        .notes {
+            margin-top: 8px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Book List</h1>
     <table>
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Author</th>
+                <th>Book Details</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Book Title 1</td>
-                <td>Author Name 1</td>
+                <td>
+                    <div class="book-entry">
+                        <div class="book-details">
+                            <div>dummy</div>
+                            <div>Book Title 1</div>
+                            <div>Author Name 1</div>
+                        </div>
+                        <div class="notes">Notes for Book Title 1</div>
+                    </div>
+                </td>
             </tr>
             <tr>
-                <td>Book Title 2</td>
-                <td>Author Name 2</td>
+                <td>
+                    <div class="book-entry">
+                        <div class="book-details">
+                            <div>dummy</div>
+                            <div>Book Title 2</div>
+                            <div>Author Name 2</div>
+                        </div>
+                        <div class="notes">Notes for Book Title 2</div>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
