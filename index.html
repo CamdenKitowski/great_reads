@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book List</title>
+    <title>Great Reads</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <style>
         table {
             width: 100%;
@@ -12,58 +13,110 @@
         th, td {
             border: 1px solid black;
             padding: 8px;
-            text-align: left;
-            vertical-align: top;
+            text-align: center;
         }
         th {
-            background-color: #f2f2f2;
+            cursor: pointer;
+            background-color: rgb(127, 192, 238);
         }
-        .book-entry {
-            display: flex;
-            flex-direction: column;
-        }
-        .book-details {
-            display: flex;
-            justify-content: space-between;
-        }
-        .notes {
-            margin-top: 8px;
+        .center {
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <table>
-        <thead>
-            <tr>
-                <th>Book Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <div class="book-entry">
-                        <div class="book-details">
-                            <div>dummy</div>
-                            <div>Book Title 1</div>
-                            <div>Author Name 1</div>
-                        </div>
-                        <div class="notes">Notes for Book Title 1</div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="book-entry">
-                        <div class="book-details">
-                            <div>dummy</div>
-                            <div>Book Title 2</div>
-                            <div>Author Name 2</div>
-                        </div>
-                        <div class="notes">Notes for Book Title 2</div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<h1>Great Reads</h1>
+
+<table id="bookTable">
+    <thead>
+        <tr>
+            <th onclick="sortTable(0)">Title</th>
+            <th onclick="sortTable(1)">Author</th>
+            <th onclick="sortTable(2)">Rating</th>
+            <th onclick="sortTable(3)" class="center">Completed</th>
+            <th class="center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<h2>Add a new book</h2>
+
+<form id="bookForm">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author" required>
+    <label for="rating">Rating:</label>
+    <input type="text" id="rating" name="rating" min="1" max="5" required>
+    <label for="completed">Completed:</label>
+    <input type="checkbox" id="completed" name="completed">
+    <button type="submit">Add Book</button>
+</form>
+
+<script>
+    document.getElementById('bookForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        addBook();
+    });
+
+    function addBook() {
+        const title = document.getElementById('title').value;
+        const author = document.getElementById('author').value;
+        const rating = document.getElementById('rating').value;
+        const comp = document.getElementById('completed').checked ? 'Yes' : 'No';
+
+        const table = document.getElementById('bookTable').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+
+
+        newRow.innerHTML = `
+            <td>${title}</td>
+            <td>${author}</td>
+            <td>${rating}</td>
+            <td class="center">${comp}</td>
+            <td class="center"><button onclick="deleteBook(this)">Delete</button></td>
+        `;
+
+        document.getElementById('bookForm').reset();
+    }
+
+    function deleteBook(button) {
+        const row = button.parentElement.parentElement;
+        row.remove();
+    }
+
+    function sortTable(columnIndex) {
+        
+        const table = document.getElementById('bookTable');
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+        
+        const isNumeric = columnIndex === 2;
+        const isBoolean = columnIndex === 3;
+
+        rows.sort((rowA, rowB) => {
+            let cellA = rowA.cells[columnIndex].innerText;
+            let cellB = rowB.cells[columnIndex].innerText;
+
+            if (isNumeric) {
+                return parseFloat(cellA) - parseFloat(cellB);
+            } else if (isBoolean) {
+                return (cellA === 'Yes' ? 1 : 0) - (cellB === 'Yes' ? 1 : 0);
+
+            } else {
+                return cellA.localeCompare(cellB);
+            }
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+
+</script>
+
+
 </body>
 </html>
