@@ -17,10 +17,9 @@ function BookCard({ book }) {
                     <p>{book.author}</p>
                 </div>
                 <div className="book-notes">
-                    <h3>Notes</h3>
+                    <button>Notes</button>
                 </div>
             </div>
-
         </div>
     );
 }
