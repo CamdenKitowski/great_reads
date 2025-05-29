@@ -48,6 +48,39 @@
   opacity: 1;
 }
 
+.book-details {
+  display: flex;
+  flex-direction: row; /* Makes book-info and book-notes side by side */
+  justify-content: space-between; /* Optional: spreads them out */
+  width: 100%; /* Ensures the container takes full width */
+  background-color: #999;
+  align-items: center;
+}
+
+.book-info {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: white;
+}
+
+.book-notes {
+  flex: 0 0 auto; /* Each takes equal space; adjust as needed */
+  padding-right: 35px;
+}
+
+.book-info h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.book-info p {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
 .favorite-btn {
   position: absolute;
   top: 1rem;
@@ -71,41 +104,6 @@
 
 .favorite-btn.active {
   color: #ff4757;
-}
-
-.rating-select {
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 0.5rem;
-}
-
-.book-info {
-  padding: 1rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  color: white;
-}
-
-.book-info h3 {
-  font-size: 1rem;
-  margin: 0;
-}
-
-.book-info p {
-  color: #999;
-  font-size: 0.9rem;
-}
-
-.user-rating {
-  color: #ffd700;
-  font-size: 0.9rem;
-  margin-top: auto;
 }
 
 @media (max-width: 768px) {
