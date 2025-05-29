@@ -1,3 +1,4 @@
+import "../css/BookCard.css"
 
 function BookCard({ book }) {
   return (
@@ -5,7 +6,7 @@ function BookCard({ book }) {
         <div className="book-poster">
             <img src={book.url} alt={book.title} />
             <div className="book-overlay">
-                <button className="book-button">
+                <button className="favorite-btn">
                     ♥
                 </button>
             </div>

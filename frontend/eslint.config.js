@@ -34,6 +34,7 @@ export default defineConfig([
     },
     rules: {
       "react/react-in-jsx-scope": "off", // Disable the react-in-jsx-scope rule
+      "react/prop-types": "off",
     },
   },
 ]);

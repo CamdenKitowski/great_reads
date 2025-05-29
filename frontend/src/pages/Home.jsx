@@ -1,4 +1,5 @@
 import BookCard from "../components/BookCard";
+import "../css/Home.css"
 
 function Home() {
     const books = [
