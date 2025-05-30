@@ -10,10 +10,14 @@ function Home() {
     ]
 
     return(
-        <div className="books-grid">
-            {books.map((book) => (
-                <BookCard book={book} key={book.id} />
-            ))}
+        <div className="home">
+
+            
+            <div className="books-grid">
+                {books.map((book) => (
+                    <BookCard book={book} key={book.id} />
+                ))}
+            </div>
         </div>
     )
 }
