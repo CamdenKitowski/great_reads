@@ -1,11 +1,12 @@
 import BookCard from "../components/BookCard";
-import "../css/Home.css"
+import "../css/Home.css";
 
 function Home() {
     const books = [
         { id: 1, title: "Book One", author: "Author A" },
         { id: 2, title: "Book Two", author: "Author B" },
         { id: 3, title: "Book Three", author: "Author C" },
+        { id: 4, title: "Book Four", author: "Author D" },
     ]
 
     return(

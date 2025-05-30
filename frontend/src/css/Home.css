@@ -12,9 +12,11 @@
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 100px));
   gap: 1.5rem;
   padding: 1rem;
   width: 100%;
   box-sizing: border-box;
+  margin: 0 auto;
+  justify-content: center;
 }
