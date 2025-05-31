@@ -1,23 +1,29 @@
 import BookCard from "../components/BookCard";
+import { useContext } from "react";
+import { BookContext } from "../contexts/BookContext";
 import "../css/Home.css";
 
 function Home() {
-    const books = [
-        { id: 1, title: "Book One", author: "Author A" },
-        { id: 2, title: "Book Two", author: "Author B" },
-        { id: 3, title: "Book Three", author: "Author C" },
-        { id: 4, title: "Book Four", author: "Author D" },
-    ]
+    const { books, loading, error, searchQuery } = useContext(BookContext);
 
-    return(
+    return (
         <div className="home">
-
+            <h2>{searchQuery ? `Search Results..."${searchQuery}"` : "my list"}</h2>
             
-            <div className="books-grid">
-                {books.map((book) => (
-                    <BookCard book={book} key={book.id} />
-                ))}
-            </div>
+            
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p>{error}</p>
+            ) : books.length > 0 ? (
+                <div className="books-grid">
+                    {books.map((book) => (
+                        <BookCard book={book} key={book.id} />
+                    ))}
+                </div>
+            ): (
+                <p>No books found. Try a different search.</p>
+            )}
         </div>
     )
 }

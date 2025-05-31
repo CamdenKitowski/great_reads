@@ -1,19 +1,26 @@
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { BookContext } from '../contexts/BookContext';
 import "../css/NavBar.css";
 
 function NavBar() {
     
-    function onClick() {
-        alert("clicked");
+    const { setSearchQuery } = useContext(BookContext);
+
+    function onSubmit(event) {
+        event.preventDefault();
+        const query = event.target.elements.search.value;
+        setSearchQuery(query);
     }
     
-    return <div className="navbar">
+    return (<div className="navbar">
         <div className='navbar-brand'>
             <Link to="/">Great Reads</Link>
         </div>
-        <form onSubmit={onClick} className="search-form">
+        <form onSubmit={onSubmit} className="search-form">
             <input
                 type="text"
+                name="search"
                 placeholder="Search for books..."
                 className="search-input"
             />
@@ -25,6 +32,7 @@ function NavBar() {
             <Link to="/" className="nav-link">My Reading List</Link>
         </div>
     </div>
+    );
 }
 
 export default NavBar
