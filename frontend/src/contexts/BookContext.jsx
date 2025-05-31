@@ -11,7 +11,8 @@ export const BookProvider = ({ children }) => {
 
     // Get books details from query
     const searchBooks = async (query) => {
-        const response = await fetch(`http://openlibrary.org/search.json?q=${encodeURIComponent(query)}`);
+        const encodedQuery = encodeURIComponent(query);
+        const response = await fetch(`http://openlibrary.org/search.json?q=title:${encodedQuery}+OR+author:${encodedQuery}`);
         const data = await response.json();
         const books = data.docs.slice(0,20).map((doc) => ({
             id: doc.key,
@@ -19,6 +20,7 @@ export const BookProvider = ({ children }) => {
             author: doc.author_name ? doc.author_name[0] : "Unknown Author",
             url: `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`,
         }));
+        console.log("Books fetched:", books);
         return books;
     };
 
