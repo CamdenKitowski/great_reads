@@ -38,7 +38,7 @@
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.1),
-    rgba(0, 0, 0, 0.8)
+    rgba(0, 0, 0, 0.3)
   );
   opacity: 0;
   transition: opacity 0.2s;
@@ -88,14 +88,13 @@
 
 .favorite-btn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: .8rem;
+  right: .8rem;
   color: white;
-  font-size: 1.5rem;
-  padding: 0.5rem;
+  font-size: 1.4rem;
+  padding-top: 10px;
   background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  width: 40px;
+  width: 30px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -104,7 +103,7 @@
 }
 
 .favorite-btn:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(27, 58, 197, 0.8);
 }
 
 .favorite-btn.active {
