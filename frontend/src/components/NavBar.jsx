@@ -29,7 +29,7 @@ function NavBar() {
             </button>
         </form>
         <div className='navbar-links'>
-            <Link to="/" className="nav-link">My Reading List</Link>
+            <Link to="/bookshelf" className="nav-link">My Bookshelf</Link>
         </div>
     </div>
     );
