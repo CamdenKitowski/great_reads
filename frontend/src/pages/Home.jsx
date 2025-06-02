@@ -2,6 +2,7 @@ import BookCard from "../components/BookCard";
 import { useContext } from "react";
 import { BookContext } from "../contexts/BookContext";
 import "../css/Home.css";
+// import supabase from "../config/supabaseClient";
 
 function Home() {
     const { books, loading, error, searchQuery } = useContext(BookContext);
