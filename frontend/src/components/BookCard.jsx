@@ -14,7 +14,6 @@ function BookCard({ book }) {
     return (
         <div className="book-card">
             <div className="book-poster">
-                {/* <img src={`https://covers.openlibrary.org/b/id/240727-L.jpg`} alt={book.title} /> */}
                 <img src={book.url} alt={book.title} />
                 <div className="book-overlay">
                     <button className="favorite-btn">

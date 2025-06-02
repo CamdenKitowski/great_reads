@@ -5,7 +5,7 @@ import "../css/Home.css";
 
 function Home() {
     const { books, loading, error, searchQuery } = useContext(BookContext);
-
+    
     return (
         <div className="home">
             <h2>{searchQuery ? `Search Results..."${searchQuery}"` : "my list"}</h2>
