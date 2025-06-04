@@ -20,7 +20,7 @@ function BookCard({ book }) {
     function onFavoriteClick(e) {
         e.preventDefault();
         if (favorite) {
-            removeFromFavorites(book.book_id); // need to add book id
+            removeFromFavorites(book); // need to add book id
         } else {
             addToFavorites(book);
         }

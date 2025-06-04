@@ -48,6 +48,36 @@ export const BookProvider = ({ children }) => {
         loadSearchResults();
     }, [searchQuery]);
 
+    // fetch favorites
+    // make sure the database doesnt have duplicate entries
+    useEffect(() => {
+        console.log("Fetching");
+        const fetchFavorites = async () => {
+            console.log("Fetching favorites for default user");
+            const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
+            const { data, error } = await supabase
+                .from('UserBooks')
+                .select('book_id, Books (key, title, author, cover_i)') // need to join with book table
+                .eq('user_id', defaultUserId)
+                .eq('status', 'reading_list');
+            if (error) {
+                console.error('Error fetching favorites!!!!!!!!!!1:', error.message);
+            } else {
+                const flattenedFavorites = data.map(item => ({
+                    book_id: item.book_id,
+                    openLibraryKey: item.Books.key,
+                    title: item.Books.title,
+                    author: item.Books.author,
+                    cover_i: item.Books.cover_i,
+                    url: `https://covers.openlibrary.org/b/id/${item.Books.cover_i}-L.jpg`
+                }));
+                console.log('Flattened favorites!!!!!!!!!!:', flattenedFavorites);
+                setFavorites(flattenedFavorites || []);
+            }
+        };
+        console.log('about to call fetchFavorites');
+        fetchFavorites();
+    }, []);
 
     const addToFavorites = async (book) => {
         const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
@@ -71,10 +101,10 @@ export const BookProvider = ({ children }) => {
             const { data: newBook, error: insertError } = await supabase
                 .from('Books')
                 .insert([{
+                    key: book.openLibraryKey,
                     title: book.title,
                     author: book.author,
-                    cover_i: book.cover_i,
-                    key: book.openLibraryKey
+                    cover_i: book.cover_i
                 }])
                 .select('book_id')
                 .single();
@@ -101,7 +131,7 @@ export const BookProvider = ({ children }) => {
         if (error) {
             console.error('Error adding to favorites:', error.message);
         } else {
-            console.log('Added to UserBooks');
+            console.log(`Added ${book.title} to UserBooks`);
             setFavorites(prev => [...prev, {
                 openLibraryKey: book.openLibraryKey,
                 title: book.title,
@@ -113,19 +143,19 @@ export const BookProvider = ({ children }) => {
         }
     }
 
-    const removeFromFavorites = async (bookToRemove_id) => {
+    const removeFromFavorites = async (bookToRemove) => {
         const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
         const { error } = await supabase
             .from('UserBooks')
             .delete()
             .eq('user_id', defaultUserId)
-            .eq('book_id', bookToRemove_id)
+            .eq('book_id', bookToRemove.book_id)
             .eq('status', 'reading_list');
         if (error) {
             console.error('Error removing from favorites:', error.message);
         } else {
-            console.log('Removed from UserBooks');
-            setFavorites(prev => prev.filter(book => book.book_id !== bookToRemove_id));
+            console.log(`Removed ${bookToRemove.title} from UserBooks`);
+            setFavorites(prev => prev.filter(book => book.book_id !== bookToRemove.book_id));
         }
     }
 
