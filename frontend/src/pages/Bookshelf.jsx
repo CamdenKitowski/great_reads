@@ -1,10 +1,31 @@
+import { useEffect, useState } from 'react';
+import supabase from "../config/supabaseClient";
+import { useContext } from "react";
+import { BookContext } from "../contexts/BookContext";
+import BookCard from "../components/BookCard";
 
 function Bookshelf() {
+    const {favorites} = useContext(BookContext);
+
+    console.log("favorites", favorites);
+    console.log(favorites.length);
+
+    if (favorites.length > 0) {
+        return (
+            <div className="favorites">
+                <h2>Your Favorites</h2>
+                <div className="movies-grid">
+                    {favorites.map((book) => (<BookCard book={book} key={book.key} />
+                ))}
+                </div>
+            </div>
+        )
+    }
+
     return (
-        <div>
-            <p>Hello bookshelf</p>
-        </div>
-    )
+        <p>No books added yet.</p>
+    ) 
+
 }
 
 export default Bookshelf;

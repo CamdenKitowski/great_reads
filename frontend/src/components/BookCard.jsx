@@ -1,7 +1,13 @@
 import "../css/BookCard.css";
 import { Link } from "react-router-dom";
+import supabase from "../config/supabaseClient";
+import { useContext } from "react";
+import { BookContext } from "../contexts/BookContext";
 
 function BookCard({ book }) {
+
+    const {isFavorite, addToFavorites } = useContext(BookContext);
+    const favorite = isFavorite(book.key);
 
     const shortenTitleByWords = (title, maxWords) => {
         const words = title.split(' ');
@@ -11,12 +17,22 @@ function BookCard({ book }) {
         return title;
     };
 
+    function onFavoriteClick(e) {
+        e.preventDefault();
+        addToFavorites(book);
+        // if (favorite) {
+        //     removeFromFavorites(); // need to add book id
+        // } else {
+            
+        // }
+    }
+
     return (
         <div className="book-card">
             <div className="book-poster">
                 <img src={book.url} alt={book.title} />
                 <div className="book-overlay">
-                    <button className="favorite-btn">
+                    <button className={`favorite-btn ${favorite ? "active" : ""}`}onClick={onFavoriteClick}>
                         +
                     </button>
                 </div>

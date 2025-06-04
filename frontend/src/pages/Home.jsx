@@ -19,7 +19,7 @@ function Home() {
             ) : books.length > 0 ? (
                 <div className="books-grid">
                     {books.map((book) => (
-                        <BookCard book={book} key={book.id} />
+                        <BookCard book={book} key={book.key} />
                     ))}
                 </div>
             ): (
