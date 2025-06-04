@@ -175,8 +175,6 @@ export const BookProvider = ({ children }) => {
         removeFromFavorites
     };
 
-
-
     return (
         <BookContext.Provider value={value}>
             {children}
