@@ -6,7 +6,7 @@ import { BookContext } from "../contexts/BookContext";
 
 function BookCard({ book }) {
 
-    const {isFavorite, addToFavorites } = useContext(BookContext);
+    const {isFavorite, addToFavorites, removeFromFavorites } = useContext(BookContext);
     const favorite = isFavorite(book.key);
 
     const shortenTitleByWords = (title, maxWords) => {
@@ -19,12 +19,11 @@ function BookCard({ book }) {
 
     function onFavoriteClick(e) {
         e.preventDefault();
-        addToFavorites(book);
-        // if (favorite) {
-        //     removeFromFavorites(); // need to add book id
-        // } else {
-            
-        // }
+        if (favorite) {
+            removeFromFavorites(book.book_id); // need to add book id
+        } else {
+            addToFavorites(book);
+        }
     }
 
     return (

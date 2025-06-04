@@ -113,6 +113,22 @@ export const BookProvider = ({ children }) => {
         }
     }
 
+    const removeFromFavorites = async (bookToRemove_id) => {
+        const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
+        const {error} = await supabase
+            .from('UserBooks')
+            .delete()
+            .eq('user_id', defaultUserId)
+            .eq('book_id', bookToRemove_id)
+            .eq('status', 'reading_list');
+        if (error) {
+            console.error('Error removing from favorites:', error.message);
+        } else {
+            console.log('Removed from UserBooks');
+            setFavorites(prev => prev.filter(book => book.book_id !== bookToRemove_id));
+        }
+    } 
+
     const isFavorite = (key) => {
         return favorites.some(book => book.key === key);
     }
@@ -125,7 +141,8 @@ export const BookProvider = ({ children }) => {
         error,
         favorites,
         addToFavorites,
-        isFavorite
+        isFavorite,
+        removeFromFavorites
     };
 
 
