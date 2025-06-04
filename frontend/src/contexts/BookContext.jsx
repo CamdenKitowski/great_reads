@@ -11,7 +11,7 @@ export const BookProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [favorites, setFavorites] = useState([]);
-    
+
 
     // Get books details from query
     const searchBooks = async (query) => {
@@ -19,7 +19,7 @@ export const BookProvider = ({ children }) => {
         const response = await fetch(`http://openlibrary.org/search.json?q=title:${encodedQuery}+OR+author:${encodedQuery}`);
         const data = await response.json();
         const books = data.docs.slice(0, 20).map((doc) => ({
-            key: doc.key,
+            openLibraryKey: doc.key,
             title: doc.title,
             author: doc.author_name ? doc.author_name[0] : "Unknown Author",
             cover_i: doc.cover_i,
@@ -56,7 +56,7 @@ export const BookProvider = ({ children }) => {
         const { data: existingBook, error: checkError } = await supabase
             .from('Books')
             .select('book_id')
-            .eq('key', book.key)
+            .eq('key', book.openLibraryKey)
             .single();
 
         if (checkError && checkError.code !== 'PGRST116') {
@@ -74,7 +74,7 @@ export const BookProvider = ({ children }) => {
                     title: book.title,
                     author: book.author,
                     cover_i: book.cover_i,
-                    key: book.key
+                    key: book.openLibraryKey
                 }])
                 .select('book_id')
                 .single();
@@ -103,7 +103,7 @@ export const BookProvider = ({ children }) => {
         } else {
             console.log('Added to UserBooks');
             setFavorites(prev => [...prev, {
-                key: book.key,
+                openLibraryKey: book.openLibraryKey,
                 title: book.title,
                 author: book.author,
                 cover_i: book.cover_i,
@@ -115,7 +115,7 @@ export const BookProvider = ({ children }) => {
 
     const removeFromFavorites = async (bookToRemove_id) => {
         const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
-        const {error} = await supabase
+        const { error } = await supabase
             .from('UserBooks')
             .delete()
             .eq('user_id', defaultUserId)
@@ -127,10 +127,10 @@ export const BookProvider = ({ children }) => {
             console.log('Removed from UserBooks');
             setFavorites(prev => prev.filter(book => book.book_id !== bookToRemove_id));
         }
-    } 
+    }
 
-    const isFavorite = (key) => {
-        return favorites.some(book => book.key === key);
+    const isFavorite = (openLibraryKey) => {
+        return favorites.some(book => book.openLibraryKey === openLibraryKey);
     }
 
     const value = {

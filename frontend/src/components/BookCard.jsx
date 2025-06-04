@@ -7,7 +7,7 @@ import { BookContext } from "../contexts/BookContext";
 function BookCard({ book }) {
 
     const {isFavorite, addToFavorites, removeFromFavorites } = useContext(BookContext);
-    const favorite = isFavorite(book.key);
+    const favorite = isFavorite(book.openLibraryKey);
 
     const shortenTitleByWords = (title, maxWords) => {
         const words = title.split(' ');

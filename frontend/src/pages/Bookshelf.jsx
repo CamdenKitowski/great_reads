@@ -15,7 +15,7 @@ function Bookshelf() {
             <div className="favorites">
                 <h2>Your Favorites</h2>
                 <div className="movies-grid">
-                    {favorites.map((book) => (<BookCard book={book} key={book.key} />
+                    {favorites.map((book) => (<BookCard book={book} key={book.openLibraryKey} />
                 ))}
                 </div>
             </div>
