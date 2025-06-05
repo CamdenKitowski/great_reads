@@ -1,8 +1,9 @@
-/* .home {
+.home {
   padding: 2rem 0;
-  width: 100%;
+  width: 90%;
   box-sizing: border-box;
-} */
+  margin: 0 auto;
+}
 
 @media (max-width: 639px) {
   .home {
@@ -15,8 +16,14 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 100px));
   gap: 1.5rem;
   padding: 1rem;
-  width: 100%;
+  /* width: 90%; */
   box-sizing: border-box;
   margin: 0 auto;
   justify-content: center;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  /* text-align: center; */
 }

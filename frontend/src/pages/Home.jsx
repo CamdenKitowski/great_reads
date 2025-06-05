@@ -9,7 +9,7 @@ function Home() {
     
     return (
         <div className="home">
-            <h2>{searchQuery ? `Search Results..."${searchQuery}"` : "my list"}</h2>
+            <h2>{searchQuery ? `Search results for..."${searchQuery}"` : "my list"}</h2>
             
             
             {loading ? (
