@@ -9,7 +9,6 @@
 
 /* Container limits content width and centers it */
 .navbar-content {
-    /* max-width: 1200px; Set your preferred max width (e.g., 1200px is typical) */
     width: 90%;
     margin: 0 auto; /* Center the container */
     padding: 0 1rem; /* Add horizontal padding to keep content from touching edges */
