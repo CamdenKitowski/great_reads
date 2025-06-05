@@ -7,6 +7,18 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Container limits content width and centers it */
+.navbar-content {
+    /* max-width: 1200px; Set your preferred max width (e.g., 1200px is typical) */
+    width: 90%;
+    margin: 0 auto; /* Center the container */
+    padding: 0 1rem; /* Add horizontal padding to keep content from touching edges */
+    display: flex;
+    justify-content: space-between; /* Spread out brand, search, and links */
+    align-items: center;
+    box-sizing: border-box; /* Ensure padding doesn’t affect width */
+}
+
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: bold;
@@ -24,9 +36,49 @@
   transition: background-color 0.2s;
 }
 
-.nav-link:hover {
-  background-color: rgba(255, 0, 251, 0.1);
+/* .nav-link:hover {
+  background-color: rgba(162, 255, 0, 0.1);
+} */
+
+
+
+.search-form {
+  max-width: 600px;
+  width: 100%;
+  /* margin: 0 auto 2rem; */
+  display: flex;
+  gap: 1rem;
+  /* padding: 0 1rem; */
+  box-sizing: border-box;
+  justify-content: center;
 }
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+  font-size: 1rem;
+}
+
+.search-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #b1b1b1;
+  color: white;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.search-button:hover {
+  background-color: rgb(202, 202, 202);
+  border-color: #fcfcfc;
+}
+
+
 
 @media (max-width: 768px) {
   .navbar {

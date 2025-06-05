@@ -57,7 +57,7 @@
   flex-direction: row; /* Makes book-info and book-notes side by side */
   justify-content: space-between; /* Optional: spreads them out */
   width: 100%; /* Ensures the container takes full width */
-  background-color: #999;
+  background-color: #00000000;
   align-items: center;
   flex-grow: 1;
 }

@@ -4,7 +4,7 @@ import { BookContext } from '../contexts/BookContext';
 import "../css/NavBar.css";
 
 function NavBar() {
-    
+
     const { setSearchQuery } = useContext(BookContext);
 
     function onSubmit(event) {
@@ -12,24 +12,26 @@ function NavBar() {
         const query = event.target.elements.search.value;
         setSearchQuery(query);
     }
-    
+
     return (<div className="navbar">
-        <div className='navbar-brand'>
-            <Link to="/">Great Reads</Link>
-        </div>
-        <form onSubmit={onSubmit} className="search-form">
-            <input
-                type="text"
-                name="search"
-                placeholder="Search for books..."
-                className="search-input"
-            />
-            <button type="submit" className="search-button">
-                Search
-            </button>
-        </form>
-        <div className='navbar-links'>
-            <Link to="/bookshelf" className="nav-link">My Bookshelf</Link>
+        <div className='navbar-content'>
+            <div className='navbar-brand'>
+                <Link to="/">Great Reads</Link>
+            </div>
+            <form onSubmit={onSubmit} className="search-form">
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search for books..."
+                    className="search-input"
+                />
+                <button type="submit" className="search-button">
+                    Search
+                </button>
+            </form>
+            <div className='navbar-links'>
+                <Link to="/bookshelf" className="nav-link">My Bookshelf</Link>
+            </div>
         </div>
     </div>
     );
