@@ -5,5 +5,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: rgba(166, 213, 10, 0.1);
+  background-color: #2b2b2b; /* Deep black background */
+  color: #e0e0e0; /* Light gray text */
 }
