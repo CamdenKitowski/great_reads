@@ -13,7 +13,7 @@ function Home() {
             
             
             {loading ? (
-                <p>Loading...</p>
+                <p>search for book...</p>
             ) : error ? (
                 <p>{error}</p>
             ) : books.length > 0 ? (
