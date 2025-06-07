@@ -30,8 +30,9 @@ function NavBar() {
                     Search
                 </button>
             </form>
-            <div className='navbar-links'>
-                <Link to="/bookshelf" className="nav-link">My Bookshelf</Link>
+            <div className='navbar-links'> 
+                {/* Prob will make more links on the nav so will need make extra classes */}
+                <Link to="/bookshelf" >My Bookshelf</Link>
             </div>
         </div>
     </div>

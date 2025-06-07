@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Arial Rounded MT;
   line-height: 1.5;
   font-weight: 400;
 
@@ -39,11 +39,11 @@ body {
 
 a {  /* Links are under the attribute */
   font-weight: 500;
-  color: #97c2bd;
+  color: #a88f60;
   text-decoration: inherit;
 }
-a:hover {
-  color: #9be0d8;
+a:hover { /* Media a:hover takes precedence */
+  color: #a88f60;
 }
 
 h1 {
@@ -62,9 +62,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 /* button:hover {
   border-color: #12ff02;
 } */
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -76,7 +78,7 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #9be0d8;
+    color: #ccbb9b;
   }
   button {
     background-color: #f9f9f9;
