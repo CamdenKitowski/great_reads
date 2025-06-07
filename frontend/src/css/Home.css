@@ -1,8 +1,10 @@
 .home {
-  padding: 2rem 0;
   width: 90%;
   box-sizing: border-box;
   margin: 0 auto;
+  font-family: Roobert, Open-Sans, sans-serif;
+  font-weight: 100;
+  font-size: 16px;
 }
 
 .books-grid {
@@ -21,6 +23,10 @@ h2 {
   margin-bottom: 1rem;
   padding: 0 1rem;
   /* text-align: center; */
+}
+
+.search-text {
+  text-align: center;
 }
 
 @media (max-width: 639px) {

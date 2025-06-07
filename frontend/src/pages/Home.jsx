@@ -2,18 +2,16 @@ import BookCard from "../components/BookCard";
 import { useContext } from "react";
 import { BookContext } from "../contexts/BookContext";
 import "../css/Home.css";
-// import supabase from "../config/supabaseClient";
 
 function Home() {
     const { books, loading, error, searchQuery } = useContext(BookContext);
     
     return (
         <div className="home">
-            <h2>{searchQuery ? `Search results for..."${searchQuery}"` : "my list"}</h2>
-            
+            <h2>{searchQuery ? `Search results for..."${searchQuery}"` : ""}</h2>
             
             {loading ? (
-                <p>search for book...</p>
+                <p className="search-text">Search for books using the search bar</p>
             ) : error ? (
                 <p>{error}</p>
             ) : books.length > 0 ? (

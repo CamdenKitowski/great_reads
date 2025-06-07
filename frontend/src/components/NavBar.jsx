@@ -11,6 +11,7 @@ function NavBar() {
         event.preventDefault();
         const query = event.target.elements.search.value;
         setSearchQuery(query);
+        event.target.reset();
     }
 
     return (<div className="navbar">

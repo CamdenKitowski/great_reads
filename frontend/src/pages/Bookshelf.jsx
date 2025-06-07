@@ -3,6 +3,7 @@ import supabase from "../config/supabaseClient";
 import { useContext } from "react";
 import { BookContext } from "../contexts/BookContext";
 import BookCard from "../components/BookCard";
+import "../css/Bookshelf.css";
 
 function Bookshelf() {
     const {favorites} = useContext(BookContext);
@@ -14,7 +15,7 @@ function Bookshelf() {
         return (
             <div className="favorites">
                 <h2>Your Favorites</h2>
-                <div className="movies-grid">
+                <div className="books-grid">
                     {favorites.map((book) => (<BookCard book={book} key={book.openLibraryKey} />
                 ))}
                 </div>
