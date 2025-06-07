@@ -30,7 +30,13 @@
 }
 
 
+.search-input,
+.search-button {
+  
+}
+
 .search-form {
+  /* font-family: Arial Rounded MT; */
   max-width: 600px;
   width: 100%;
   display: flex;
@@ -40,6 +46,7 @@
 }
 
 .search-input {
+  font-family: "Arial Rounded MT", Arial, sans-serif;
   flex: 1;
   padding: 0.75rem 1rem;
   border: none;
