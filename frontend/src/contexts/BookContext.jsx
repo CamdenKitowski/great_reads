@@ -5,6 +5,8 @@ export const BookContext = createContext();
 
 export const BookProvider = ({ children }) => {
 
+    // I bet we can have a user id as a global variable throughout the app
+
     // books to add from the search
     const [books, setBooks] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -49,7 +51,7 @@ export const BookProvider = ({ children }) => {
     }, [searchQuery]);
 
     // fetch favorites
-    // make sure the database doesnt have duplicate entries
+    // make sure the database doesnt have duplicate entries for it to work
     useEffect(() => {
         console.log("Fetching");
         const fetchFavorites = async () => {
@@ -162,6 +164,8 @@ export const BookProvider = ({ children }) => {
     const isFavorite = (openLibraryKey) => {
         return favorites.some(book => book.openLibraryKey === openLibraryKey);
     }
+
+    // const getNote = ()
 
     const value = {
         searchQuery,

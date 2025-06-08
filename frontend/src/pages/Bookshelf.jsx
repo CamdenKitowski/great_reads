@@ -16,6 +16,7 @@ function Bookshelf() {
             <div className="favorites">
                 <h2>Your Favorites</h2>
                 <div className="books-grid">
+                    {/* this is prop driling */}
                     {favorites.map((book) => (<BookCard book={book} key={book.openLibraryKey} />
                 ))}
                 </div>

@@ -6,6 +6,9 @@ import { BookContext } from "../contexts/BookContext";
 
 function BookCard({ book }) {
 
+    // need user id -- hopefully through context eventually
+
+    console.log("BookCard", book.book_id);
     const {isFavorite, addToFavorites, removeFromFavorites } = useContext(BookContext);
     const favorite = isFavorite(book.openLibraryKey);
 
@@ -42,6 +45,7 @@ function BookCard({ book }) {
                     <p>{book.author}</p>
                 </div>
                 <div className="book-notes">
+                    {/* /notes will prob have a variable to a specific note --- need to give it a book */}
                     <Link to="/notes">Notes</Link>
                 </div>
             </div>
