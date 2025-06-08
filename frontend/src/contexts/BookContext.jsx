@@ -120,21 +120,26 @@ export const BookProvider = ({ children }) => {
             generatedBookId = existingBook.book_id;
         }
 
+        console.log('Generated book_id:', generatedBookId);
         // insert into UserBooks
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('UserBooks')
             .insert([{
                 user_id: defaultUserId,
                 book_id: generatedBookId,
                 status: 'reading_list'
-            }]);
+            }])
+            .select('user_book_id')
+            .single();
 
         // update favorites state
         if (error) {
             console.error('Error adding to favorites:', error.message);
         } else {
             console.log(`Added ${book.title} to UserBooks`);
+            console.log('this is user_book_id', data.user_book_id);
             setFavorites(prev => [...prev, {
+                user_book_id: data.user_book_id,
                 openLibraryKey: book.openLibraryKey,
                 title: book.title,
                 author: book.author,

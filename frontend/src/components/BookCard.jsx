@@ -6,10 +6,7 @@ import { BookContext } from "../contexts/BookContext";
 
 function BookCard({ book }) {
 
-    // need user id -- hopefully through context eventually
-
-    console.log("BookCard", book.book_id);
-    const {isFavorite, addToFavorites, removeFromFavorites } = useContext(BookContext);
+    const {favorites, isFavorite, addToFavorites, removeFromFavorites } = useContext(BookContext);
     const favorite = isFavorite(book.openLibraryKey);
 
     const shortenTitleByWords = (title, maxWords) => {
@@ -23,11 +20,14 @@ function BookCard({ book }) {
     function onFavoriteClick(e) {
         e.preventDefault();
         if (favorite) {
-            removeFromFavorites(book); // need to add book id
+            removeFromFavorites(book);
         } else {
             addToFavorites(book);
         }
     }
+
+    const favoriteBook = favorites.find(fav => fav.book_id === book.book_id || fav.openLibraryKey === book.openLibraryKey);
+    const notesLink = favoriteBook ? `/notes/${favoriteBook.user_book_id}` : null;
 
     return (
         <div className="book-card">
@@ -45,8 +45,12 @@ function BookCard({ book }) {
                     <p>{book.author}</p>
                 </div>
                 <div className="book-notes">
-                    {/* /notes will prob have a variable to a specific note --- need to give it a book */}
-                    <Link to="/notes">Notes</Link>
+                    {notesLink ? (
+                        <Link to={notesLink} state={{ book }}>Notes</Link>
+                    ) : (
+                        <span>Notes</span>
+                    )}
+
                 </div>
             </div>
         </div>
