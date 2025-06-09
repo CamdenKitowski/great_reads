@@ -2,6 +2,66 @@
   font-family:'Courier New', Courier, monospace
 }
 
+.notes-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.toolbar {
+    display: flex;
+    gap: 3px;
+    padding: 10px;
+    background-color: white; /* Matches editor background */
+    border-bottom: 1px solid #ddd; /* Subtle separation from editor content */
+    /* margin-bottom: 10px; */
+}
+
+.toolbar button {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1; /* Light gray for a modern button look */
+    color: black;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.toolbar button:hover {
+    background-color: #e9ecef; /* Slightly darker on hover */
+}
+
+.toolbar button.is-active {
+    border-color: black;
+    font-weight: bold;
+}
+
+.toolbar button:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.prose {
+    /* Target the editor content */
+    background-color: white; /* White background */
+    color: black; /* Black text */
+    padding: 10px;
+    border: 1px solid #ddd; /* Optional border to define the editor area */
+    border-top: none; /* Remove top border to blend with toolbar */
+    min-height: 200px; /* Ensure some height for visibility */
+}
+
+.prose [contenteditable]:focus,
+.prose:focus {
+    outline: none; /* Remove default outline */
+    outline-style: none; /* Additional safeguard */
+    outline-width: 0; /* Explicitly set to zero */
+    box-shadow: none; /* Remove any box shadow that might mimic an outline */
+    border-color: #ddd; /* Keep the existing border color */
+}
+
 /* Basic editor styles */
 .tiptap {
   :first-child {
@@ -50,73 +110,10 @@
     font-size: 1.1rem; 
   }
 
-  h4, 
-  h5, 
-  h6 { 
-    font-size: 1rem; 
-  }
-
-  /* Code and preformatted text styles */
-  code {
-    background-color: var(--purple-light);
-    border-radius: 0.4rem;
-    color: var(--black);
-    font-size: 0.85rem;
-    padding: 0.25em 0.3em;
-  }
-
-  pre {
-    background: var(--black);
-    border-radius: 0.5rem;
-    color: var(--white);
-    font-family: 'JetBrainsMono', monospace;
-    margin: 1.5rem 0;
-    padding: 0.75rem 1rem;
-
-    code {
-      background: none;
-      color: inherit;
-      font-size: 0.8rem;
-      padding: 0;
-    }
-  }
-
-  blockquote {
-    border-left: 3px solid var(--gray-3);
-    margin: 1.5rem 0;
-    padding-left: 1rem;
-  }
-
   hr {
     border: none;
-    border-top: 1px solid var(--gray-2);
+    border-top: 1px solid #a1a1a1;
     margin: 2rem 0;
-  }
-}
-
-/* Floating menu */
-.floating-menu {
-  display: flex;
-  background-color: var(--gray-3);
-  padding: 0.1rem;
-  border-radius: 0.5rem;
-
-  button {
-    background-color: unset;
-    padding: 0.275rem 0.425rem;
-    border-radius: 0.3rem;
-
-    &:hover {
-      background-color: var(--gray-3);
-    }
-
-    &.is-active {
-      background-color: var(--white);
-      color: var(--purple);
-
-      &:hover {
-        color: var(--purple-contrast);
-      }
-    }
+    color: black;
   }
 }

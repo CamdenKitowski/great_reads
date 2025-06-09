@@ -3,7 +3,7 @@ import "../css/Notes.css";
 import { useParams, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import supabase from '../config/supabaseClient';
-import { useEditor, EditorContent, FloatingMenu, BubbleMenu } from '@tiptap/react';
+import { useEditor, EditorContent, } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
 
@@ -59,36 +59,82 @@ function Notes() {
     //     }
     // }
 
+
+
     return (
-        <>
-            <div className="notes-container">
-                <h2>Notes for {book.title} by {book.author}</h2>
-                {editor && <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
-                    <div data-testid="floating-menu" className="floating-menu">
-                        <button
-                            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                            className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-                        >
-                            H1
-                        </button>
-                        <button
-                            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                            className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-                        >
-                            H2
-                        </button>
-                        <button
-                            onClick={() => editor.chain().focus().toggleBulletList().run()}
-                            className={editor.isActive('bulletList') ? 'is-active' : ''}
-                        >
-                            Bullet list
-                        </button>
-                    </div>
-                </FloatingMenu>}
-                <EditorContent editor={editor} />
-                <button className="save-button">Save Notes</button>
+        <div className="notes-container">
+            <h2>Notes for {book.title} by {book.author}</h2>
+            <div className="toolbar">
+                <button
+                    onClick={() => editor.chain().focus().toggleBold().run()}
+                    disabled={
+                        !editor.can()
+                            .chain()
+                            .focus()
+                            .toggleBold()
+                            .run()
+                    }
+                    className={editor.isActive('bold') ? 'is-active' : ''}
+                >
+                    Bold
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleItalic().run()}
+                    disabled={
+                        !editor.can()
+                            .chain()
+                            .focus()
+                            .toggleItalic()
+                            .run()
+                    }
+                    className={editor.isActive('italic') ? 'is-active' : ''}
+                >
+                    Italic
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().setParagraph().run()}
+                    className={editor.isActive('paragraph') ? 'is-active' : ''}
+                >
+                    Paragraph
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                    className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                >
+                    H1
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                    className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                >
+                    H2
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                    className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+                >
+                    H3
+                </button>
+               
+                <button
+                    onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    className={editor.isActive('bulletList') ? 'is-active' : ''}
+                >
+                    .
+                </button>
+                <button
+                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                    className={editor.isActive('orderedList') ? 'is-active' : ''}
+                >
+                    1,2,3
+                </button>
+                <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+                    Horizontal Rule
+                </button>
             </div>
-        </>
+            <EditorContent editor={editor} className="prose" />
+            <button className="save-button">Save Notes</button>
+        </div>
     )
 }
 
