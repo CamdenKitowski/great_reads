@@ -15,7 +15,7 @@ function App() {
       <main className='main-content'>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/notes/:user_book_id" element={<Notes />} />
+          <Route path="/notes/:user_book_id" element={<Notes />} /> {/* The might need to add user_id later */}
           <Route path="/bookshelf" element={<Bookshelf />} />
         </Routes>
       </main>

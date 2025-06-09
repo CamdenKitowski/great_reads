@@ -1,61 +1,94 @@
 import "../css/Notes.css";
+
 import { useParams, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import supabase from '../config/supabaseClient';
-
+import { useEditor, EditorContent, FloatingMenu, BubbleMenu } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 
 
 function Notes() {
-    const { user_book_id } = useParams();
-    const location = useLocation();
+    const { user_book_id } = useParams(); // get the user_book_id from the URL parameters
+    const location = useLocation(); // get navigation contents with any passed state
     const book = location.state?.book; // Get the book from the state passed by the BookCard component
-    const [notes, setNotes] = useState("");
     const [loading, setLoading] = useState(true); // might not need this, but it helps with the loading state
 
+    // could make this a separate component later
+    const editor = useEditor({
+        extensions: [StarterKit],
+        content: '<p></p>',
+    });
 
-    console.log("user_book_id", user_book_id);
-    useEffect(() => {
-        const fetchNotes = async () => {
-            const { data, error } = await supabase
-                .from('UserBooks')
-                .select('notes')
-                .eq('user_book_id', user_book_id)
-                .single();
-            
-            if (error) {
-                console.error('Error fetching notes:', error.message);
-            } else {
-                setNotes(data.notes || ""); // Set notes or empty string if null
-            }
-            setLoading(false);
-        };
-        fetchNotes();
-    }, [user_book_id]);
+    // useEffect(() => {
+    //     const fetchNotes = async () => {
+    //         if (!user_book_id) {
+    //             console.error('user_book_id is undefined');
+    //             setLoading(false);
+    //             return;
+    //         }
+    //         const { data, error } = await supabase
+    //             .from('UserBooks')
+    //             .select('notes')
+    //             .eq('user_book_id', user_book_id)
+    //             .single();
 
-    const handleNotesChange = (e) => {
-        setNotes(e.target.value);
-    }
+    //         if (error) {
+    //             console.error('Error fetching notes:', error.message);
+    //         } else {
+    //             editor?.commands.setContent(data?.notes || '<p></p>');
+    //         }
+    //         setLoading(false);
+    //     };
+    //     fetchNotes();
+    // }, [user_book_id, editor]);
 
-    const saveNotes = async () => {
-        const { error } = await supabase
-            .from('UserBooks')
-            .update({ notes })
-            .eq('user_book_id', user_book_id);
-        
-        if (error) {
-            console.error('Error saving notes:', error.message);
-        } else {
-            console.log('Notes saved successfully');
-        }
-    }
+    // const saveNotes = async () => {
+    //     if (!user_book_id || !editor) {
+    //         console.error('user_book_id or editor is undefined');
+    //         return;
+    //     }
+    //     const { error } = await supabase
+    //         .from('UserBooks')
+    //         .update({ notes: editor.getHTML() })
+    //         .eq('user_book_id', user_book_id);
 
+    //     if (error) {
+    //         console.error('Error saving notes:', error.message);
+    //     } else {
+    //         console.log('Notes saved successfully');
+    //     }
+    // }
 
     return (
-        <div className="notes-container">
-            <h2>Notes for {book.title} by {book.author}</h2>
-            <textarea value={notes} onChange={handleNotesChange} rows="10" cols="50" />
-            <button onClick={saveNotes}>Save Notes</button>
-        </div>
+        <>
+            <div className="notes-container">
+                <h2>Notes for {book.title} by {book.author}</h2>
+                {editor && <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
+                    <div data-testid="floating-menu" className="floating-menu">
+                        <button
+                            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                            className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+                        >
+                            H1
+                        </button>
+                        <button
+                            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                            className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+                        >
+                            H2
+                        </button>
+                        <button
+                            onClick={() => editor.chain().focus().toggleBulletList().run()}
+                            className={editor.isActive('bulletList') ? 'is-active' : ''}
+                        >
+                            Bullet list
+                        </button>
+                    </div>
+                </FloatingMenu>}
+                <EditorContent editor={editor} />
+                <button className="save-button">Save Notes</button>
+            </div>
+        </>
     )
 }
 

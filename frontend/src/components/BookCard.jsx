@@ -26,7 +26,7 @@ function BookCard({ book }) {
         }
     }
 
-    const favoriteBook = favorites.find(fav => fav.book_id === book.book_id || fav.openLibraryKey === book.openLibraryKey);
+    const favoriteBook = favorites.find(fav => fav.book_id === book.book_id);
     const notesLink = favoriteBook ? `/notes/${favoriteBook.user_book_id}` : null;
 
     return (
@@ -48,7 +48,7 @@ function BookCard({ book }) {
                     {notesLink ? (
                         <Link to={notesLink} state={{ book }}>Notes</Link>
                     ) : (
-                        <span>Notes</span>
+                        <span></span>
                     )}
 
                 </div>
