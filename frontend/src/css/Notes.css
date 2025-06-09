@@ -4,7 +4,7 @@
 
 .notes-container {
     padding: 20px;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -14,7 +14,8 @@
     padding: 10px;
     background-color: white; /* Matches editor background */
     border-bottom: 1px solid #ddd; /* Subtle separation from editor content */
-    /* margin-bottom: 10px; */
+    justify-content: center;;
+    border-radius: 4px 4px 0 0; /* Rounded corners for the top */
 }
 
 .toolbar button {
@@ -51,6 +52,7 @@
     border: 1px solid #ddd; /* Optional border to define the editor area */
     border-top: none; /* Remove top border to blend with toolbar */
     min-height: 200px; /* Ensure some height for visibility */
+    border-radius: 0 0 4px 4px; /* Rounded corners for the bottom */
 }
 
 .prose [contenteditable]:focus,
@@ -62,7 +64,11 @@
     border-color: #ddd; /* Keep the existing border color */
 }
 
-/* Basic editor styles */
+.save-button {
+    margin-top: 10px;
+}
+
+/* Style for tip tap from EditorContent */ 
 .tiptap {
   :first-child {
     margin-top: 0;

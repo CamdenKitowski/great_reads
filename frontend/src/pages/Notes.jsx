@@ -8,10 +8,12 @@ import StarterKit from '@tiptap/starter-kit';
 
 
 function Notes() {
+
     const { user_book_id } = useParams(); // get the user_book_id from the URL parameters
     const location = useLocation(); // get navigation contents with any passed state
     const book = location.state?.book; // Get the book from the state passed by the BookCard component
     const [loading, setLoading] = useState(true); // might not need this, but it helps with the loading state
+
 
     // could make this a separate component later
     const editor = useEditor({
@@ -19,45 +21,51 @@ function Notes() {
         content: '<p></p>',
     });
 
-    // useEffect(() => {
-    //     const fetchNotes = async () => {
-    //         if (!user_book_id) {
-    //             console.error('user_book_id is undefined');
-    //             setLoading(false);
-    //             return;
-    //         }
-    //         const { data, error } = await supabase
-    //             .from('UserBooks')
-    //             .select('notes')
-    //             .eq('user_book_id', user_book_id)
-    //             .single();
+    
 
-    //         if (error) {
-    //             console.error('Error fetching notes:', error.message);
-    //         } else {
-    //             editor?.commands.setContent(data?.notes || '<p></p>');
-    //         }
-    //         setLoading(false);
-    //     };
-    //     fetchNotes();
-    // }, [user_book_id, editor]);
+    useEffect(() => {
+        console.log(user_book_id);
+        const fetchNotes = async () => {
+            console.log('in here')
+            console.log('Fetching notes for user_book_id:', user_book_id);
+            if (!user_book_id) {
+                console.error('user_book_id is undefined');
+                setLoading(false);
+                return;
+            }
+            const { data, error } = await supabase
+                .from('UserBooks')
+                .select('notes')
+                .eq('user_book_id', user_book_id)
+                .single();
 
-    // const saveNotes = async () => {
-    //     if (!user_book_id || !editor) {
-    //         console.error('user_book_id or editor is undefined');
-    //         return;
-    //     }
-    //     const { error } = await supabase
-    //         .from('UserBooks')
-    //         .update({ notes: editor.getHTML() })
-    //         .eq('user_book_id', user_book_id);
+            if (error) {
+                console.error('Error fetching notes:', error.message);
+            } else {
+                editor?.commands.setContent(data?.notes || '<p></p>');
+            }
+            setLoading(false);
+        };
+        fetchNotes();
+    }, [user_book_id, editor]);
 
-    //     if (error) {
-    //         console.error('Error saving notes:', error.message);
-    //     } else {
-    //         console.log('Notes saved successfully');
-    //     }
-    // }
+    const saveNotes = async () => {
+        console.log('user_book_id:', user_book_id);
+        if (!user_book_id || !editor) {
+            console.error('user_book_id or editor is undefined');
+            return;
+        }
+        const { error } = await supabase
+            .from('UserBooks')
+            .update({ notes: editor.getHTML() })
+            .eq('user_book_id', user_book_id);
+
+        if (error) {
+            console.error('Error saving notes:', error.message);
+        } else {
+            console.log('Notes saved successfully');
+        }
+    }
 
 
 
@@ -133,7 +141,7 @@ function Notes() {
                 </button>
             </div>
             <EditorContent editor={editor} className="prose" />
-            <button className="save-button">Save Notes</button>
+            <button onClick={saveNotes} className="save-button">Save Notes</button>
         </div>
     )
 }

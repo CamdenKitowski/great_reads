@@ -59,13 +59,14 @@ export const BookProvider = ({ children }) => {
             const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
             const { data, error } = await supabase
                 .from('UserBooks')
-                .select('book_id, Books (key, title, author, cover_i)') // need to join with book table
+                .select('book_id, user_book_id, Books (key, title, author, cover_i)') // need to join with book table
                 .eq('user_id', defaultUserId)
                 .eq('status', 'reading_list');
             if (error) {
                 console.error('Error fetching favorites!!!!!!!!!!1:', error.message);
             } else {
                 const flattenedFavorites = data.map(item => ({
+                    user_book_id: item.user_book_id,
                     book_id: item.book_id,
                     openLibraryKey: item.Books.key,
                     title: item.Books.title,
