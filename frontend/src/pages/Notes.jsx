@@ -12,6 +12,7 @@ function Notes() {
     const { user_book_id } = useParams(); // get the user_book_id from the URL parameters
     const location = useLocation(); // get navigation contents with any passed state
     const book = location.state?.book; // Get the book from the state passed by the BookCard component
+    const [loading, setLoading] = useState(true); // might not need this, but it helps with the loading state
 
 
     // could make this a separate component later
