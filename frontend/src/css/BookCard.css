@@ -90,7 +90,6 @@
   position: absolute;
   top: .8rem;
   right: .8rem;
-  color: white;
   font-size: 1.4rem;
   padding-top: 10px;
   background-color: rgba(0, 0, 0, 0.5);
@@ -103,11 +102,11 @@
 }
 
 .favorite-btn:hover {
-  background-color: rgba(27, 58, 197, 0.8);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .favorite-btn.active {
-  color: #ff4757;
+  color: #ff0000;
 }
 
 @media (max-width: 768px) {

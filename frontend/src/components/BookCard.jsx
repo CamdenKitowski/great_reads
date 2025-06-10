@@ -35,7 +35,7 @@ function BookCard({ book }) {
                 <img src={book.url} alt={book.title} />
                 <div className="book-overlay">
                     <button className={`favorite-btn ${favorite ? "active" : ""}`}onClick={onFavoriteClick}>
-                        +
+                        ♥
                     </button>
                 </div>
             </div>
