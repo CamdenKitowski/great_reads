@@ -3,12 +3,35 @@
 }
 
 .notes-container {
-    padding: 20px;
     max-width: 900px;
     margin: 0 auto;
 }
 
+.note-book-info {
+   display: flex;
+   max-width: 1000px;
+   align-items: center;
+   gap: 40px;
+   /* background-color: rgb(76, 0, 255); */
+   justify-content: center;
+}
+
+
+.note-book-cover {
+    width: 250px; /* Fixed width for the book cover */
+}
+
+.note-book-cover img {
+    width: 100%;      /* Fills the container */
+    height: auto;     /* Maintains aspect ratio */
+    max-width: 250px; /* Ensures image doesn’t exceed container */
+    display: block;   /* Removes any inline spacing issues */
+    border-radius: 8px;
+}
+
+
 .toolbar {
+    margin-top: 10px;
     display: flex;
     gap: 3px;
     padding: 10px;

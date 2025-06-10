@@ -21,7 +21,6 @@ function Notes() {
         content: '<p></p>',
     });
 
-    
 
     useEffect(() => {
         console.log(user_book_id);
@@ -67,11 +66,18 @@ function Notes() {
         }
     }
 
-
-
     return (
         <div className="notes-container">
-            <h2>Notes for {book.title} by {book.author}</h2>
+            <div className="note-book-info">
+                <div className="note-book-cover">
+                    <img src={book.url} alt={book.title} />
+                </div>
+                <div className="note-book-details">
+                    <h1>{book.title}</h1>
+                    <h3>{book.author}</h3>
+                </div>
+            </div>
+
             <div className="toolbar">
                 <button
                     onClick={() => editor.chain().focus().toggleBold().run()}
@@ -123,7 +129,7 @@ function Notes() {
                 >
                     H3
                 </button>
-               
+
                 <button
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
                     className={editor.isActive('bulletList') ? 'is-active' : ''}
