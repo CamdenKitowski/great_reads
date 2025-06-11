@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import supabase from "../config/supabaseClient";
 import { useContext } from "react";
 import { BookContext } from "../contexts/BookContext";
 import BookCard from "../components/BookCard";
