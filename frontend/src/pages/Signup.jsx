@@ -1,20 +1,21 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import '../css/Signup.css';
 
 function Signup() {
     const { signUp } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const handleSignup = async () => {
         try {
             await signUp({ email, password });
             navigate('/home');
-        } catch (err) {
-            setError(err.message);
+        } catch (error) {
+            console.error("Login failed:", error.message);
+            alert("Signup failed. Please check your credentials and try again.");
         }
     };
 
