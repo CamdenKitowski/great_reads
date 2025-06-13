@@ -17,7 +17,7 @@ function NavBar() {
     return (<div className="navbar">
         <div className='navbar-content'>
             <div className='navbar-brand'>
-                <Link to="/">Great Reads</Link>
+                <Link to="/home">Great Reads</Link>
             </div>
             <form onSubmit={onSubmit} className="search-form">
                 <input
