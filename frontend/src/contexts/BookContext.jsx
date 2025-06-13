@@ -78,7 +78,6 @@ export const BookProvider = ({ children }) => {
                 setFavorites(flattenedFavorites || []);
             }
         };
-        console.log('about to call fetchFavorites');
         fetchFavorites();
     }, []);
 

@@ -11,34 +11,39 @@ function Login() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
-        try {
-            await signIn({ email, password });
-            navigate("/home");
-        } catch (error) {
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        // Call signIn and destructure the response
+        const { data, error } = await signIn({ email, password });
+        
+        if (error) {
             console.error("Login failed:", error.message);
             alert("Login failed. Please check your credentials and try again.");
+        } else {
+            navigate("/home");
         }
-    }
+    };
 
     return (
         <div className="user-detail-container">
             <h2>Login</h2>
-            <input 
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                className="user-input-field"
-            />
-            <input 
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                className="user-input-field"
-            />
-            <button onClick={handleLogin}>Log In</button>
+            <form onSubmit={handleLogin}>
+                <input 
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    className="user-input-field"
+                />
+                <input 
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    className="user-input-field"
+                />
+                <button type="submit">Log In</button>
+            </form>
             <p>
                 Don’t have an account? <a href="/signup">Sign Up</a>
             </p>

@@ -8,39 +8,45 @@ function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    
 
-    const handleSignup = async () => {
-        try {
-            await signUp({ email, password });
-            navigate('/home');
-        } catch (error) {
-            console.error("Login failed:", error.message);
-            alert("Signup failed. Please check your credentials and try again.");
+    // make more descriptive error messages 
+    const handleSignup = async (e) => {
+        e.preventDefault();
+        // Call signIn and destructure the response
+        const { data, error } = await signUp({ email, password });
+        
+        if (error) {
+            console.error("Sign up failed:", error.message);
+            alert("Signup failed. Try again.");
+        } else {
+            navigate("/home");
         }
     };
+
 
     return (
         <div className="user-detail-container">
             <h2>Sign Up</h2>
-            <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                className="user-input-field"
-            />
-            <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                className="user-input-field"
-            />
-            <button onClick={handleSignup}>
-                Sign Up
-            </button>
+            <form onSubmit={handleSignup}>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    className="user-input-field"
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    className="user-input-field"
+                />
+                <button type="submit">Sign Up</button>
+            </form>
             <p>
-                Already have an account? <a href="/login">Log In</a>
+                Already have an account? <a href="/">Log In</a>
             </p>
         </div>
     );
