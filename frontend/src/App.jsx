@@ -24,7 +24,7 @@ function App() {
             <Route path='/signup' element={<Signup />} />
             <Route path='/' element={<Login />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/notes/:user_book_id" element={<Notes />} /> {/* The might need to add user_id later */}
+            <Route path="/notes/:user_book_id" element={<Notes />} />
             <Route path="/bookshelf" element={<Bookshelf />} />
           </Routes>
         </main>

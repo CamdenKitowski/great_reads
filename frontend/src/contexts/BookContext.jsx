@@ -7,15 +7,7 @@ export const BookContext = createContext();
 
 export const BookProvider = ({ children }) => {
 
-    // I bet we can have a user id as a global variable throughout the app
-
     const { user } = useContext(AuthContext);
-
-
-    
-
-
-
 
     // books to add from the search
     const [books, setBooks] = useState([]);
