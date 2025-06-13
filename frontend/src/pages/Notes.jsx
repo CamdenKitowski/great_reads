@@ -56,7 +56,7 @@ function Notes() {
         }
         const { error } = await supabase
             .from('UserBooks')
-            .update({ notes: editor.getHTML() })
+            .update({ notes: editor.getHTML() }) // what does this mean??
             .eq('user_book_id', user_book_id);
 
         if (error) {
