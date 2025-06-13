@@ -1,11 +1,21 @@
 import { createContext, useState, useEffect } from "react";
 import supabase from "../config/supabaseClient";
+import { AuthContext } from "./AuthContext";
+import { useContext } from 'react';
 
 export const BookContext = createContext();
 
 export const BookProvider = ({ children }) => {
 
     // I bet we can have a user id as a global variable throughout the app
+
+    const { user } = useContext(AuthContext);
+
+
+    
+
+
+
 
     // books to add from the search
     const [books, setBooks] = useState([]);
@@ -50,20 +60,28 @@ export const BookProvider = ({ children }) => {
         loadSearchResults();
     }, [searchQuery]);
 
-    // fetch favorites
-    // make sure the database doesnt have duplicate entries for it to work
+    // fetch favorites - make sure the database doesnt have duplicate entries for it to work
     useEffect(() => {
         console.log("Fetching");
+
         const fetchFavorites = async () => {
-            console.log("Fetching favorites for default user");
-            const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
+
+            if (!user) {
+                console.log("No user found");
+                setFavorites([]);
+                return;
+            }
+
+            console.log("Fetching favorites for user: ", user.id);
+
             const { data, error } = await supabase
                 .from('UserBooks')
-                .select('book_id, user_book_id, Books (key, title, author, cover_i)') // need to join with book table
-                .eq('user_id', defaultUserId)
+                .select('book_id, user_book_id, Books (key, title, author, cover_i)') // joining with books table
+                .eq('user_id', user.id)
                 .eq('status', 'reading_list');
+
             if (error) {
-                console.error('Error fetching favorites!!!!!!!!!!1:', error.message);
+                console.error('Error fetching favorites! ', error.message);
             } else {
                 const flattenedFavorites = data.map(item => ({
                     user_book_id: item.user_book_id,
@@ -74,22 +92,24 @@ export const BookProvider = ({ children }) => {
                     cover_i: item.Books.cover_i,
                     url: `https://covers.openlibrary.org/b/id/${item.Books.cover_i}-L.jpg`
                 }));
-                console.log('Flattened favorites!!!!!!!!!!:', flattenedFavorites);
+                console.log('Flattened favorites: ', flattenedFavorites);
                 setFavorites(flattenedFavorites || []);
             }
         };
         fetchFavorites();
-    }, []);
+    }, [user]);
 
     const addToFavorites = async (book) => {
-        const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
         let generatedBookId;
+
+        console.log("Adding book to favorites:", book);
 
         const { data: existingBook, error: checkError } = await supabase
             .from('Books')
             .select('book_id')
             .eq('key', book.openLibraryKey)
-            .single();
+            .maybeSingle();
+
 
         if (checkError && checkError.code !== 'PGRST116') {
             // PGRST116 means "no rows found", which is fine; other errors are problems
@@ -125,7 +145,7 @@ export const BookProvider = ({ children }) => {
         const { data, error } = await supabase
             .from('UserBooks')
             .insert([{
-                user_id: defaultUserId,
+                user_id: user.id,
                 book_id: generatedBookId,
                 status: 'reading_list'
             }])
@@ -148,14 +168,15 @@ export const BookProvider = ({ children }) => {
                 book_id: generatedBookId
             }]);
         }
+        console.log("Favorites after adding:", favorites);
     }
 
     const removeFromFavorites = async (bookToRemove) => {
-        const defaultUserId = '550e8400-e29b-41d4-a716-446655440000';
+        console.log("Removing book from favorites:", bookToRemove);
         const { error } = await supabase
             .from('UserBooks')
             .delete()
-            .eq('user_id', defaultUserId)
+            .eq('user_id', user.id)
             .eq('book_id', bookToRemove.book_id)
             .eq('status', 'reading_list');
         if (error) {

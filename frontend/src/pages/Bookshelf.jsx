@@ -2,12 +2,16 @@ import { useContext } from "react";
 import { BookContext } from "../contexts/BookContext";
 import BookCard from "../components/BookCard";
 import "../css/Bookshelf.css";
+// import { AuthContext } from "../contexts/AuthContext";
 
 function Bookshelf() {
     const {favorites} = useContext(BookContext);
+    // const { user } = useContext(AuthContext);
 
     console.log("favorites", favorites);
     console.log(favorites.length);
+
+    // console.log("User in BookContext:", user.id);
 
     if (favorites.length > 0) {
         return (
