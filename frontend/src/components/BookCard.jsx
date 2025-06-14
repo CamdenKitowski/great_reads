@@ -6,8 +6,8 @@ import { BookContext } from "../contexts/BookContext";
 
 function BookCard({ book }) {
 
-    const {favorites, isFavorite, addToFavorites, removeFromFavorites } = useContext(BookContext);
-    const favorite = isFavorite(book.openLibraryKey);
+    // const {favorites, isFavorite, addToFavorites, removeFromFavorites } = useContext(BookContext);
+    // const favorite = isFavorite(book.openLibraryKey);
 
     const shortenTitleByWords = (title, maxWords) => {
         const words = title.split(' ');
@@ -18,23 +18,31 @@ function BookCard({ book }) {
     };
 
     function onFavoriteClick(e) {
-        e.preventDefault();
-        if (favorite) {
-            removeFromFavorites(book);
-        } else {
-            addToFavorites(book);
-        }
+        console.log('dummyyy function');
+        
+        // e.preventDefault();
+        // if (favorite) {
+        //     removeFromFavorites(book);
+        // } else {
+        //     addToFavorites(book);
+        // }
     }
 
-    const favoriteBook = favorites.find(fav => fav.book_id === book.book_id);
-    const notesLink = favoriteBook ? `/notes/${favoriteBook.user_book_id}` : null;
+    // const favoriteBook = favorites.find(fav => fav.book_id === book.book_id);
+    // const notesLink = favoriteBook ? `/notes/${favoriteBook.user_book_id}` : null;
 
+    const notesLink = book.user_book_id ? `/notes/${book.user_book_id}` : null;
+
+    
+
+    // className={`favorite-btn ${favorite ? "active" : ""}`}onClick={onFavoriteClick}
     return (
         <div className="book-card">
             <div className="book-poster">
                 <img src={book.url} alt={book.title} />
                 <div className="book-overlay">
-                    <button className={`favorite-btn ${favorite ? "active" : ""}`}onClick={onFavoriteClick}>
+                    {/* need to add functionality for each status -- so you can it */}
+                    <button>
                         ♥
                     </button>
                 </div>

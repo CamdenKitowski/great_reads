@@ -29,11 +29,15 @@
   padding: 0 1rem;
 }
 
-
-.search-input,
-.search-button {
-  
+.dropdown-toggle::after {
+  display: none !important; 
 }
+
+/* need to change this eventually -- need to align with end of the book card*/ 
+#dropdown-basic-button {
+  margin-right: 1rem;
+}
+
 
 .search-form {
   /* font-family: Arial Rounded MT; */

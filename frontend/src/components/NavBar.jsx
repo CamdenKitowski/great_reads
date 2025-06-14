@@ -1,7 +1,12 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Link } from 'react-router-dom';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useContext } from 'react';
 import { BookContext } from '../contexts/BookContext';
 import "../css/NavBar.css";
+
 
 function NavBar() {
 
@@ -30,9 +35,19 @@ function NavBar() {
                     Search
                 </button>
             </form>
-            <div className='navbar-links'> 
-                {/* Prob will make more links on the nav so will need make extra classes */}
-                <Link to="/bookshelf" >My Bookshelf</Link>
+            <div className='navbar-links'>
+                <DropdownButton id="dropdown-basic-button" title="Bookshelf">
+                    <Dropdown.Item as={Link} to="/bookshelf/wishlist">Wishlist</Dropdown.Item>
+                    <Dropdown.Item as={Link} to="/bookshelf/reading">Reading</Dropdown.Item>
+                    <Dropdown.Item as={Link} to="/bookshelf/done">Done</Dropdown.Item>
+                </DropdownButton>
+
+                <DropdownButton id="profile-dropdown" title="C">
+                    <Dropdown.Item as={Link} to="/bookshelf">Profile</Dropdown.Item>
+                    <Dropdown.Item as={Link} to="/home">Friends</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item as={Link} to="/home">Log out</Dropdown.Item>
+                </DropdownButton>
             </div>
         </div>
     </div>

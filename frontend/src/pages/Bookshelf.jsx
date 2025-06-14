@@ -1,28 +1,88 @@
-import { useContext } from "react";
-import { BookContext } from "../contexts/BookContext";
-import BookCard from "../components/BookCard";
+import { useContext, useState, useEffect } from "react";
+// import { BookContext } from "../contexts/BookContext";
+import { AuthContext } from "../contexts/AuthContext";
+import { useParams } from "react-router-dom";
+// import BookCard from "../components/BookCard";
 import "../css/Bookshelf.css";
+import supabase from "../config/supabaseClient";
+import BookCard from "../components/BookCard";
+
 
 function Bookshelf() {
-    const {favorites} = useContext(BookContext);
+    const { status } = useParams();
+    const [booksOnBookshelf, setBooksOnBookshelf] = useState([]);
+    const { user } = useContext(AuthContext);
 
-    console.log("favorites", favorites);
-    console.log(favorites.length);
 
-    if (favorites.length > 0) {
+        // const {favorites} = useContext(BookContext);
+    // console.log("favorites", favorites);
+    // console.log(favorites.length);
+
+    // if (favorites.length > 0) {
+    //     return (
+    //         <div className="favorites">
+    //             <h2>Your Favorites</h2>
+                
+    //             <div className="books-grid">
+    //                 {favorites.map((book) => (<BookCard book={book} key={book.openLibraryKey} />
+    //             ))}
+    //             </div>
+    //         </div>
+    //     )
+    // }
+
+    useEffect(() =>  {
+        if (!user) {
+            setBooksOnBookshelf([]);
+            return;
+        }
+
+        const fetchBooksOnBookshelf = async() => {
+            console.log('fetching bookshelf books');
+            console.log('status: ', status);
+            console.log("user: ", user.id);
+            const { data, error } = await supabase
+                .from('UserBooks')
+                .select('book_id, user_book_id, Books (key, title, author, cover_i)')
+                .eq('user_id', user.id)
+                .eq('status', status);
+
+            if (error) {
+                console.error(`Error fetching books for status "${status}":`, error.message);
+                setBooksOnBookshelf([]);
+            } else {
+                const flattenedBooks = data.map(item => ({
+                    user_book_id: item.user_book_id,
+                    book_id: item.book_id,
+                    openLibraryKey: item.Books.key,
+                    title: item.Books.title,
+                    author: item.Books.author,
+                    cover_i: item.Books.cover_i,
+                    url: `https://covers.openlibrary.org/b/id/${item.Books.cover_i}-L.jpg`
+                }));
+                setBooksOnBookshelf(flattenedBooks || []);
+            }
+        };        
+        fetchBooksOnBookshelf();
+
+    }, [status, user]);
+
+    if (booksOnBookshelf.length > 0) {
         return (
-            <div className="favorites">
-                <h2>Your Favorites</h2>
+            <div id="bookshelf">
+                <h2>{status.charAt(0).toUpperCase() + status.slice(1)} Books</h2>
                 <div className="books-grid">
-                    {favorites.map((book) => (<BookCard book={book} key={book.openLibraryKey} />
-                ))}
+                    {booksOnBookshelf.map((book) => (
+                        <BookCard book={book} key={book.openLibraryKey} />
+                    ))}
                 </div>
             </div>
         )
     }
 
+
     return (
-        <p>No books added yet.</p>
+        <p>No books in {status} yet.</p>
     ) 
 
 }
