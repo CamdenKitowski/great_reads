@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider'
 import { useContext } from 'react';
 import { BookContext } from '../contexts/BookContext';
 
@@ -12,16 +13,17 @@ function BookCard({ book }) {
 
     const [bookCardAnchorEl, setbookCardAnchorEl] = useState(null);
     const bookCardOpen = Boolean(bookCardAnchorEl);
-    const { addBookToStatus, getBookStatuses } = useContext(BookContext);
+    const { setBookStatus, getBookStatus } = useContext(BookContext);
 
-    const bookStatuses = getBookStatuses(book.openLibraryKey);
-
+    const currentStatus = getBookStatus(book.openLibraryKey);
 
     const handleBookCardClick = (event) => {
         setbookCardAnchorEl(event.currentTarget);
     };
     const handleBookCardClose = (status) => {
-        addBookToStatus(book, status);
+        if (status) {
+            setBookStatus(book, status);
+        }
         setbookCardAnchorEl(null);
     };
 
@@ -65,21 +67,27 @@ function BookCard({ book }) {
                     >
                         <MenuItem
                             onClick={() => handleBookCardClose('wishlist')}
-                            disabled={bookStatuses.includes("wishlist")}
+                            disabled={currentStatus === 'wishlist'}
                         >
                             Wishlist
                         </MenuItem>
                         <MenuItem
                             onClick={() => handleBookCardClose('reading')}
-                            disabled={bookStatuses.includes("reading")}
+                            disabled={currentStatus === 'reading'}
                         >
                             Reading
                         </MenuItem>
                         <MenuItem onClick={() =>
                             handleBookCardClose('done')}
-                            disabled={bookStatuses.includes("done")}
+                            disabled={currentStatus === 'done'}
                         >
                             Done
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem onClick={() =>
+                            handleBookCardClose('done')}
+                        >
+                            Delete
                         </MenuItem>
                     </Menu>
                 </div>

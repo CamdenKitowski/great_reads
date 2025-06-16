@@ -49,6 +49,7 @@ export const BookProvider = ({ children }) => {
         loadSearchResults();
     }, [searchQuery]);
 
+    // this is for tracking status
     useEffect(() => {
         const fetchUserBooks = async () => {
             if (!user) {
@@ -56,13 +57,11 @@ export const BookProvider = ({ children }) => {
                 return;
             }
 
-
             setLoading(true);
             const { data, error } = await supabase
                 .from("UserBooks")
                 .select("Books (key), status")
                 .eq("user_id", user.id);
-
 
             if (error) {
                 console.error("Error fetching user books: ", error.message);
@@ -71,12 +70,7 @@ export const BookProvider = ({ children }) => {
                 const map = {};
                 data.forEach((item) => {
                     const key = item.Books.key;
-                    if (!map[key]) {
-                        map[key] = [];
-                    }
-                    if (!map[key].includes(item.status)) {
-                        map[key].push(item.status);
-                    }
+                    map[key] = item.status;
                 });
                 setUserBooks(map);
             }
@@ -86,7 +80,7 @@ export const BookProvider = ({ children }) => {
     }, [user]);
 
 
-    const addBookToStatus = async (book, status) => {
+    const setBookStatus = async (book, status) => {
         if (!user) return;
 
         let generatedBookId;
@@ -124,28 +118,24 @@ export const BookProvider = ({ children }) => {
 
         const { data, error } = await supabase
             .from('UserBooks')
-            .insert([{
+            .upsert({
                 user_id: user.id,
                 book_id: generatedBookId,
-                status: status // Use the provided status
-            }])
+                status: status
+            }, {
+                onConflict: ['user_id', 'book_id']
+            })
             .select('user_book_id')
             .single();
 
         if (error) {
             console.error(`Error adding book to ${status}:`, error.message);
         } else {
-            console.log(`Added ${book.title} to ${status} to database`);
-            setUserBooks((prev) => {
-                const updated = { ...prev };
-                if (!updated[book.openLibraryKey]) {
-                    updated[book.openLibraryKey] = [];
-                }
-                if (!updated[book.openLibraryKey].includes(status)) {
-                    updated[book.openLibraryKey].push(status)
-                }
-                return updated;
-            });
+            console.log(`Set ${book.title} to ${status} in database`);
+            setUserBooks((prev) => ({
+                ...prev,
+                [book.openLibraryKey]: status
+            }));
         }
     };
 
@@ -189,7 +179,7 @@ export const BookProvider = ({ children }) => {
         }
     };
 
-    const getBookStatuses = (openLibraryKey) => userBooks[openLibraryKey] || [];
+    const getBookStatus = (openLibraryKey) => userBooks[openLibraryKey] || [];
 
     const value = {
         searchQuery,
@@ -197,9 +187,9 @@ export const BookProvider = ({ children }) => {
         books,
         loading,
         error,
-        addBookToStatus,
+        setBookStatus,
         removeBookFromStatus,
-        getBookStatuses
+        getBookStatus
     };
 
     return (
