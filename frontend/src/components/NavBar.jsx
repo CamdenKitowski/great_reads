@@ -63,14 +63,8 @@ function NavBar() {
                     aria-haspopup="true"
                     aria-expanded={bookshelfOpen ? 'true' : undefined}
                     onClick={handleBookshelfClick}
-                    sx={{
-        '&:active': {
-            borderColor: '#ff0000',
-        },
-    }}
-                    
                 >
-                    Bookshelf
+                    Bookshelf   
                 </Button>
                 <Menu
                     id="bookshelf-menu"
