@@ -1,8 +1,6 @@
 import { useContext, useState, useEffect } from "react";
-// import { BookContext } from "../contexts/BookContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { useParams } from "react-router-dom";
-// import BookCard from "../components/BookCard";
 import "../css/Bookshelf.css";
 import supabase from "../config/supabaseClient";
 import BookCard from "../components/BookCard";
@@ -12,24 +10,6 @@ function Bookshelf() {
     const { status } = useParams();
     const [booksOnBookshelf, setBooksOnBookshelf] = useState([]);
     const { user } = useContext(AuthContext);
-
-
-        // const {favorites} = useContext(BookContext);
-    // console.log("favorites", favorites);
-    // console.log(favorites.length);
-
-    // if (favorites.length > 0) {
-    //     return (
-    //         <div className="favorites">
-    //             <h2>Your Favorites</h2>
-                
-    //             <div className="books-grid">
-    //                 {favorites.map((book) => (<BookCard book={book} key={book.openLibraryKey} />
-    //             ))}
-    //             </div>
-    //         </div>
-    //     )
-    // }
 
     useEffect(() =>  {
         if (!user) {
@@ -70,7 +50,7 @@ function Bookshelf() {
     if (booksOnBookshelf.length > 0) {
         return (
             <div id="bookshelf">
-                <h2>{status.charAt(0).toUpperCase() + status.slice(1)} Books</h2>
+                <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
                 <div className="books-grid">
                     {booksOnBookshelf.map((book) => (
                         <BookCard book={book} key={book.openLibraryKey} />
