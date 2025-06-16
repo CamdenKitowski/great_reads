@@ -29,13 +29,20 @@
   padding: 0 1rem;
 }
 
-.dropdown-toggle::after {
-  display: none !important; 
+#bookshelf-button, #profile-button {
+  color: #a88f60;
 }
 
-/* need to change this eventually -- need to align with end of the book card*/ 
-#dropdown-basic-button {
-  margin-right: 1rem;
+#bookshelf-button:hover, #profile-button:hover {
+  color: #ccbb9b;
+  outline: none !important;
+}
+
+#bookshelf-button:active, 
+#bookshelf-button:focus,
+#profile-button:active,
+#profile-button:focus {
+  outline: none !important; /* Remove default outline if present */
 }
 
 

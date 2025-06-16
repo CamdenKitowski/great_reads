@@ -1,16 +1,36 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Link } from 'react-router-dom';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import React, { useState } from 'react';
 import { useContext } from 'react';
 import { BookContext } from '../contexts/BookContext';
 import "../css/NavBar.css";
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 function NavBar() {
 
     const { setSearchQuery } = useContext(BookContext);
+
+    // State for Bookshelf menu
+    const [bookshelfAnchorEl, setBookshelfAnchorEl] = useState(null);
+    const bookshelfOpen = Boolean(bookshelfAnchorEl);
+    const handleBookshelfClick = (event) => {
+        setBookshelfAnchorEl(event.currentTarget);
+    };
+    const handleBookshelfClose = () => {
+        setBookshelfAnchorEl(null);
+    };
+
+    // State for Profile menu
+    const [profileAnchorEl, setProfileAnchorEl] = useState(null);
+    const profileOpen = Boolean(profileAnchorEl);
+    const handleProfileClick = (event) => {
+        setProfileAnchorEl(event.currentTarget);
+    };
+    const handleProfileClose = () => {
+        setProfileAnchorEl(null);
+    }
 
     function onSubmit(event) {
         event.preventDefault();
@@ -36,18 +56,78 @@ function NavBar() {
                 </button>
             </form>
             <div className='navbar-links'>
-                <DropdownButton id="dropdown-basic-button" title="Bookshelf">
-                    <Dropdown.Item as={Link} to="/bookshelf/wishlist">Wishlist</Dropdown.Item>
-                    <Dropdown.Item as={Link} to="/bookshelf/reading">Reading</Dropdown.Item>
-                    <Dropdown.Item as={Link} to="/bookshelf/done">Done</Dropdown.Item>
-                </DropdownButton>
+                {/* Bookshelf Menu */}
+                <Button
+                    id="bookshelf-button"
+                    aria-controls={bookshelfOpen ? 'bookshelf-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={bookshelfOpen ? 'true' : undefined}
+                    onClick={handleBookshelfClick}
+                    sx={{
+        '&:active': {
+            borderColor: '#ff0000',
+        },
+    }}
+                    
+                >
+                    Bookshelf
+                </Button>
+                <Menu
+                    id="bookshelf-menu"
+                    anchorEl={bookshelfAnchorEl}
+                    open={bookshelfOpen}
+                    onClose={handleBookshelfClose}
+                    slotProps={{
+                        list: {
+                            'aria-labelledby': 'bookshelf-button',
+                        },
+                    }}
+                disableScrollLock={true}
 
-                <DropdownButton id="profile-dropdown" title="C">
-                    <Dropdown.Item as={Link} to="/bookshelf">Profile</Dropdown.Item>
-                    <Dropdown.Item as={Link} to="/home">Friends</Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item as={Link} to="/home">Log out</Dropdown.Item>
-                </DropdownButton>
+                >
+                    <MenuItem component={Link} to="/bookshelf/wishlist" onClick={handleBookshelfClose}>
+                        Wishlist
+                    </MenuItem>
+                    <MenuItem component={Link} to="/bookshelf/reading" onClick={handleBookshelfClose}>
+                        Reading
+                    </MenuItem>
+                    <MenuItem component={Link} to="/bookshelf/done" onClick={handleBookshelfClose}>
+                        Done
+                    </MenuItem>
+                </Menu>
+
+                {/* Profile Menu */}
+                <Button
+                    id="profile-button"
+                    aria-controls={profileOpen ? 'profile-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={profileOpen ? 'true' : undefined}
+                    onClick={handleProfileClick}
+                >
+                    C
+                </Button>
+                <Menu
+                    id="profile-menu"
+                    anchorEl={profileAnchorEl}
+                    open={profileOpen}
+                    onClose={handleProfileClose}
+                    slotProps={{
+                        list: {
+                            'aria-labelledby': 'profile-button',
+                        },
+                    }}
+                    disableScrollLock={true}
+                >
+                    <MenuItem component={Link} to="/home" onClick={handleProfileClose}>
+                        Profile
+                    </MenuItem>
+                    <MenuItem component={Link} to="/home" onClick={handleProfileClose}>
+                        Friends
+                    </MenuItem>
+                    <MenuItem component={Link} to="/home" onClick={handleProfileClose}>
+                        Log out
+                    </MenuItem>
+                </Menu>
             </div>
         </div>
     </div>
