@@ -13,16 +13,21 @@ function BookCard({ book }) {
 
     const [bookCardAnchorEl, setbookCardAnchorEl] = useState(null);
     const bookCardOpen = Boolean(bookCardAnchorEl);
-    const { setBookStatus, getBookStatus } = useContext(BookContext);
+    const { setBookStatus, deleteUserBook, getBookStatus } = useContext(BookContext);
 
     const currentStatus = getBookStatus(book.openLibraryKey);
 
     const handleBookCardClick = (event) => {
         setbookCardAnchorEl(event.currentTarget);
     };
-    const handleBookCardClose = (status) => {
-        if (status) {
-            setBookStatus(book, status);
+    const handleBookCardClose = (action) => {
+        if (action === 'delete') {
+            const confirmDelete = window.confirm('Are you sure you want to remove this book from your bookshelf?');
+            if (confirmDelete) {
+                deleteUserBook(book);
+            }
+        } else if (action) {
+            setBookStatus(book, action); // For status updates like 'wishlist', 'reading', 'done'
         }
         setbookCardAnchorEl(null);
     };
@@ -84,9 +89,7 @@ function BookCard({ book }) {
                             Done
                         </MenuItem>
                         <Divider />
-                        <MenuItem onClick={() =>
-                            handleBookCardClose('done')}
-                        >
+                        <MenuItem onClick={() => handleBookCardClose('delete')}>
                             Delete
                         </MenuItem>
                     </Menu>

@@ -18,9 +18,6 @@ function Bookshelf() {
         }
 
         const fetchBooksOnBookshelf = async() => {
-            console.log('fetching bookshelf books');
-            console.log('status: ', status);
-            console.log("user: ", user.id);
             const { data, error } = await supabase
                 .from('UserBooks')
                 .select('book_id, user_book_id, Books (key, title, author, cover_i)')

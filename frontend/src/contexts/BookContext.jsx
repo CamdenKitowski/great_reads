@@ -139,7 +139,8 @@ export const BookProvider = ({ children }) => {
         }
     };
 
-    const removeBookFromStatus = async (book, status) => {
+
+    const deleteUserBook = async (book) => {
         if (!user) return;
 
         const { data: bookData, error: fetchError } = await supabase
@@ -147,37 +148,19 @@ export const BookProvider = ({ children }) => {
             .delete()
             .eq('user_id', user.id)
             .eq('book_id', book.book_id)
-            .eq('status', status);
 
         if (fetchError) {
-            console.error(`Error removing book from ${status}:`, error.message);
+            console.log(`Error removing ${book.title} `, fetchError.message);
             return
-        }
-
-        const { error } = await supabase
-            .from("UserBooks")
-            .delete()
-            .eq("user_id", user.id)
-            .eq("book_id", bookData.book_id)
-            .eq("status", status);
-
-
-        if (error) {
-            console.error(`Error removing book from ${status}:`, error.message);
         } else {
-            console.log(`Removed ${book.title} from ${status} in database`);
+            console.log(`Removed ${book.title} in database`);
             setUserBooks((prev) => {
                 const updated = { ...prev };
-                if (updated[book.openLibraryKey]) {
-                    updated[book.openLibraryKey] = updated[book.openLibraryKey].filter((s) => s !== status);
-                    if (updated[book.openLibraryKey].length === 0) {
-                        delete updated[book.openLibraryKey];
-                    }
-                }
+                delete updated[book.openLibraryKey];
                 return updated;
             });
         }
-    };
+    }
 
     const getBookStatus = (openLibraryKey) => userBooks[openLibraryKey] || [];
 
@@ -188,7 +171,7 @@ export const BookProvider = ({ children }) => {
         loading,
         error,
         setBookStatus,
-        removeBookFromStatus,
+        deleteUserBook,
         getBookStatus
     };
 
