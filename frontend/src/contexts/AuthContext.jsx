@@ -11,12 +11,10 @@ export const AuthProvider = ({ children }) => {
         const getSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             setUser(session?.user || null);
-            console.log("Initial session:", session);
         };
         getSession();
 
         const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-            console.log("Auth state changed:", event, session);
             setUser(session?.user || null);
             
         });
