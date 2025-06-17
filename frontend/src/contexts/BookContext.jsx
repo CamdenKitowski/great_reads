@@ -2,6 +2,8 @@ import { createContext, useState, useEffect } from "react";
 import supabase from "../config/supabaseClient";
 import { AuthContext } from "./AuthContext";
 import { useContext } from 'react';
+import defaultBookCover from '../images/great_reads_dummy.png';
+
 
 export const BookContext = createContext();
 
@@ -24,7 +26,8 @@ export const BookProvider = ({ children }) => {
             title: doc.title,
             author: doc.author_name ? doc.author_name[0] : "Unknown Author",
             cover_i: doc.cover_i,
-            url: `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`,
+            url: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` :  defaultBookCover,
+
         }));
         console.log("Books fetched:", books);
         return books;
