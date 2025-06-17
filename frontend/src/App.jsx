@@ -25,7 +25,7 @@ function App() {
             <Route path='/' element={<Login />} />
             <Route path="/home" element={<Home />} />
             <Route path="/notes/:user_book_id" element={<Notes />} />
-            <Route path="/bookshelf" element={<Bookshelf />} />
+            <Route path="/bookshelf/:status" element={<Bookshelf />} />
           </Routes>
         </main>
       </BookProvider>

@@ -29,11 +29,22 @@
   padding: 0 1rem;
 }
 
-
-.search-input,
-.search-button {
-  
+#bookshelf-button, #profile-button {
+  color: #a88f60;
 }
+
+#bookshelf-button:hover, #profile-button:hover {
+  color: #ccbb9b;
+  outline: none !important;
+}
+
+#bookshelf-button:active, 
+#bookshelf-button:focus,
+#profile-button:active,
+#profile-button:focus {
+  outline: none !important; /* Remove default outline if present */
+}
+
 
 .search-form {
   /* font-family: Arial Rounded MT; */

@@ -8,14 +8,11 @@ export const BookContext = createContext();
 export const BookProvider = ({ children }) => {
 
     const { user } = useContext(AuthContext);
-
-    // books to add from the search
-    const [books, setBooks] = useState([]);
+    const [books, setBooks] = useState([]); // for queries 
+    const [userBooks, setUserBooks] = useState({}); // for status 
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [favorites, setFavorites] = useState([]);
-
 
     // Get books details from query
     const searchBooks = async (query) => {
@@ -52,49 +49,41 @@ export const BookProvider = ({ children }) => {
         loadSearchResults();
     }, [searchQuery]);
 
-    // fetch favorites - make sure the database doesnt have duplicate entries for it to work
+    // this is for tracking status
     useEffect(() => {
-        console.log("Fetching");
-
-        const fetchFavorites = async () => {
-
+        const fetchUserBooks = async () => {
             if (!user) {
-                console.log("No user found");
-                setFavorites([]);
+                setUserBooks({});
                 return;
             }
 
-            console.log("Fetching favorites for user: ", user.id);
-
+            setLoading(true);
             const { data, error } = await supabase
-                .from('UserBooks')
-                .select('book_id, user_book_id, Books (key, title, author, cover_i)') // joining with books table
-                .eq('user_id', user.id)
-                .eq('status', 'reading_list');
+                .from("UserBooks")
+                .select("Books (key), status")
+                .eq("user_id", user.id);
 
             if (error) {
-                console.error('Error fetching favorites! ', error.message);
+                console.error("Error fetching user books: ", error.message);
+                setUserBooks({});
             } else {
-                const flattenedFavorites = data.map(item => ({
-                    user_book_id: item.user_book_id,
-                    book_id: item.book_id,
-                    openLibraryKey: item.Books.key,
-                    title: item.Books.title,
-                    author: item.Books.author,
-                    cover_i: item.Books.cover_i,
-                    url: `https://covers.openlibrary.org/b/id/${item.Books.cover_i}-L.jpg`
-                }));
-                console.log('Flattened favorites: ', flattenedFavorites);
-                setFavorites(flattenedFavorites || []);
+                const map = {};
+                data.forEach((item) => {
+                    const key = item.Books.key;
+                    map[key] = item.status;
+                });
+                setUserBooks(map);
             }
+            setLoading(false);
         };
-        fetchFavorites();
+        fetchUserBooks();
     }, [user]);
 
-    const addToFavorites = async (book) => {
-        let generatedBookId;
 
-        console.log("Adding book to favorites:", book);
+    const setBookStatus = async (book, status) => {
+        if (!user) return;
+
+        let generatedBookId;
 
         const { data: existingBook, error: checkError } = await supabase
             .from('Books')
@@ -102,16 +91,12 @@ export const BookProvider = ({ children }) => {
             .eq('key', book.openLibraryKey)
             .maybeSingle();
 
-
         if (checkError && checkError.code !== 'PGRST116') {
-            // PGRST116 means "no rows found", which is fine; other errors are problems
             console.error('Error checking book in Books:', checkError.message);
             return;
         }
 
-        // get book_id
         if (!existingBook) {
-            // book does not exist, insert it
             const { data: newBook, error: insertError } = await supabase
                 .from('Books')
                 .insert([{
@@ -128,62 +113,56 @@ export const BookProvider = ({ children }) => {
             }
             generatedBookId = newBook.book_id;
         } else {
-            // book exists, use its ID
             generatedBookId = existingBook.book_id;
         }
 
-        console.log('Generated book_id:', generatedBookId);
-        // insert into UserBooks
         const { data, error } = await supabase
             .from('UserBooks')
-            .insert([{
+            .upsert({
                 user_id: user.id,
                 book_id: generatedBookId,
-                status: 'reading_list'
-            }])
+                status: status
+            }, {
+                onConflict: ['user_id', 'book_id']
+            })
             .select('user_book_id')
             .single();
 
-        // update favorites state
         if (error) {
-            console.error('Error adding to favorites:', error.message);
+            console.error(`Error adding book to ${status}:`, error.message);
         } else {
-            console.log(`Added ${book.title} to UserBooks`);
-            console.log('this is user_book_id', data.user_book_id);
-            setFavorites(prev => [...prev, {
-                user_book_id: data.user_book_id,
-                openLibraryKey: book.openLibraryKey,
-                title: book.title,
-                author: book.author,
-                cover_i: book.cover_i,
-                url: book.url,
-                book_id: generatedBookId
-            }]);
+            console.log(`Set ${book.title} to ${status} in database`);
+            setUserBooks((prev) => ({
+                ...prev,
+                [book.openLibraryKey]: status
+            }));
         }
-        console.log("Favorites after adding:", favorites);
-    }
+    };
 
-    const removeFromFavorites = async (bookToRemove) => {
-        console.log("Removing book from favorites:", bookToRemove);
-        const { error } = await supabase
+
+    const deleteUserBook = async (book) => {
+        if (!user) return;
+
+        const { data: bookData, error: fetchError } = await supabase
             .from('UserBooks')
             .delete()
             .eq('user_id', user.id)
-            .eq('book_id', bookToRemove.book_id)
-            .eq('status', 'reading_list');
-        if (error) {
-            console.error('Error removing from favorites:', error.message);
+            .eq('book_id', book.book_id)
+
+        if (fetchError) {
+            console.log(`Error removing ${book.title} `, fetchError.message);
+            return
         } else {
-            console.log(`Removed ${bookToRemove.title} from UserBooks`);
-            setFavorites(prev => prev.filter(book => book.book_id !== bookToRemove.book_id));
+            console.log(`Removed ${book.title} in database`);
+            setUserBooks((prev) => {
+                const updated = { ...prev };
+                delete updated[book.openLibraryKey];
+                return updated;
+            });
         }
     }
 
-    const isFavorite = (openLibraryKey) => {
-        return favorites.some(book => book.openLibraryKey === openLibraryKey);
-    }
-
-    // const getNote = ()
+    const getBookStatus = (openLibraryKey) => userBooks[openLibraryKey] || [];
 
     const value = {
         searchQuery,
@@ -191,10 +170,10 @@ export const BookProvider = ({ children }) => {
         books,
         loading,
         error,
-        favorites,
-        addToFavorites,
-        isFavorite,
-        removeFromFavorites
+        setBookStatus,
+        deleteUserBook,
+        getBookStatus,
+        userBooks
     };
 
     return (
