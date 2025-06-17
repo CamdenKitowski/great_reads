@@ -1,3 +1,7 @@
+* {
+  font-family: Georgia, serif;
+}
+
 .navbar {
   background-color: #000000;
   padding: 1rem 2rem;
@@ -9,18 +13,25 @@
 
 /* Container limits content width and centers it */
 .navbar-content {
-    width: 90%;
-    margin: 0 auto; /* Center the container */
-    padding: 0 .25rem 0 1rem; /* top right bottom left */
-    display: flex;
-    justify-content: space-between; /* Spread out brand, search, and links */
-    align-items: center;
-    box-sizing: border-box; /* Ensure padding doesn’t affect width */
+  width: 90%;
+  margin: 0 auto;
+  /* Center the container */
+  padding: 0 .25rem 0 1rem;
+  /* top right bottom left */
+  display: flex;
+  justify-content: space-between;
+  /* Spread out brand, search, and links */
+  align-items: center;
+  box-sizing: border-box;
+  /* Ensure padding doesn’t affect width */
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 28px;
+}
+
+.MuiMenuItem-root {
+  font-family: Georgia, serif !important;
 }
 
 .navbar-links {
@@ -29,25 +40,33 @@
   padding: 0 1rem;
 }
 
-#bookshelf-button, #profile-button {
+#bookshelf-button,
+#profile-button {
   color: #a88f60;
+  font-family: Georgia, serif !important;
+  text-transform: none;
+  font-size: 20px;
+  font-weight: 600;
 }
 
-#bookshelf-button:hover, #profile-button:hover {
+#bookshelf-button:hover,
+#profile-button:hover {
   color: #ccbb9b;
   outline: none !important;
 }
 
-#bookshelf-button:active, 
+#bookshelf-button:active,
 #bookshelf-button:focus,
 #profile-button:active,
 #profile-button:focus {
-  outline: none !important; /* Remove default outline if present */
+  outline: none !important;
+  /* Remove default outline if present */
 }
 
 
+
 .search-form {
-  /* font-family: Arial Rounded MT; */
+  font-family: Georgia, serif;
   max-width: 600px;
   width: 100%;
   display: flex;
@@ -57,7 +76,7 @@
 }
 
 .search-input {
-  font-family: "Arial Rounded MT", Arial, sans-serif;
+  font-family: Georgia, serif;
   flex: 1;
   padding: 0.75rem 1rem;
   border: none;

@@ -1,3 +1,7 @@
+* {
+  font-family: Georgia, serif;
+}
+
 .book-card {
   position: relative;
   border-radius: 8px;
@@ -35,11 +39,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.1),
-    rgba(0, 0, 0, 0.3)
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.3));
   opacity: 0;
   transition: opacity 0.2s;
   display: flex;
@@ -54,9 +56,9 @@
 
 .book-details {
   display: flex;
-  flex-direction: row; /* Makes book-info and book-notes side by side */
-  justify-content: space-between; /* Optional: spreads them out */
-  width: 100%; /* Ensures the container takes full width */
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
   background-color: #00000000;
   align-items: center;
   flex-grow: 1;
@@ -72,7 +74,8 @@
 }
 
 .book-notes {
-  flex: 0 0 auto; /* Each takes equal space; adjust as needed */
+  flex: 0 0 auto;
+  /* Each takes equal space; adjust as needed */
   padding-right: 35px;
 }
 
@@ -89,23 +92,15 @@
 #bookcard-button {
   color: black;
   background-color: rgb(255, 255, 255);
+  font-family: Georgia, serif;
+  text-transform: none;
+  font-size: 16px;
 }
 
-
-.favorite-btn {
-  position: absolute;
-  top: .8rem;
-  right: .8rem;
-  font-size: 1.4rem;
-  padding-top: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 30px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
+#bookcard-menu .MuiMenuItem-root {
+  font-family: Georgia, serif
 }
+
 
 @media (max-width: 768px) {
   .book-card {
@@ -114,11 +109,5 @@
 
   .book-info {
     padding: 0.75rem;
-  }
-
-  .favorite-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 1.2rem;
   }
 }

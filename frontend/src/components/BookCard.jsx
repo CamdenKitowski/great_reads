@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider'
+import Divider from '@mui/material/Divider';
 import { useContext } from 'react';
 import { BookContext } from '../contexts/BookContext';
 

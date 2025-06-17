@@ -6,15 +6,16 @@ import "../css/NavBar.css";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
 
 
 function NavBar() {
 
-    const { setSearchQuery } = useContext(BookContext);
-
     // State for Bookshelf menu
     const [bookshelfAnchorEl, setBookshelfAnchorEl] = useState(null);
     const bookshelfOpen = Boolean(bookshelfAnchorEl);
+    const { setSearchQuery } = useContext(BookContext);
+
     const handleBookshelfClick = (event) => {
         setBookshelfAnchorEl(event.currentTarget);
     };
@@ -118,6 +119,7 @@ function NavBar() {
                     <MenuItem component={Link} to="/home" onClick={handleProfileClose}>
                         Friends
                     </MenuItem>
+                    <Divider />
                     <MenuItem component={Link} to="/home" onClick={handleProfileClose}>
                         Log out
                     </MenuItem>

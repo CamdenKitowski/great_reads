@@ -21,7 +21,7 @@ function Home() {
                     ))}
                 </div>
             ): (
-                <p>No books found. Try a different search.</p>
+                <p id="paragraph-text">No books found. Try a different search.</p>
             )}
         </div>
     )

@@ -50,7 +50,7 @@ function Bookshelf() {
     if (booksOnBookshelf.length > 0) {
         return (
             <div id="bookshelf">
-                <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
+                <h2 id="title-status">{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
                 <div className="books-grid">
                     {booksOnBookshelf.map((book) => (
                         <BookCard book={book} key={book.openLibraryKey} />
