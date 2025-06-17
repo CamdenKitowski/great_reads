@@ -19,7 +19,7 @@ export const BookProvider = ({ children }) => {
     // Get books details from query
     const searchBooks = async (query) => {
         const encodedQuery = encodeURIComponent(query);
-        const response = await fetch(`http://openlibrary.org/search.json?q=title:${encodedQuery}+OR+author:${encodedQuery}`);
+        const response = await fetch(`https://openlibrary.org/search.json?q=title:${encodedQuery}+OR+author:${encodedQuery}`);
         const data = await response.json();
         const books = data.docs.slice(0, 20).map((doc) => ({
             openLibraryKey: doc.key,
