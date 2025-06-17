@@ -172,7 +172,8 @@ export const BookProvider = ({ children }) => {
         error,
         setBookStatus,
         deleteUserBook,
-        getBookStatus
+        getBookStatus,
+        userBooks
     };
 
     return (

@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { BookContext } from "../contexts/BookContext";
 import { useParams } from "react-router-dom";
 import "../css/Bookshelf.css";
 import supabase from "../config/supabaseClient";
@@ -10,6 +11,8 @@ function Bookshelf() {
     const { status } = useParams();
     const [booksOnBookshelf, setBooksOnBookshelf] = useState([]);
     const { user } = useContext(AuthContext);
+    const { userBooks } = useContext(BookContext);
+
 
     useEffect(() =>  {
         if (!user) {
@@ -42,7 +45,7 @@ function Bookshelf() {
         };        
         fetchBooksOnBookshelf();
 
-    }, [status, user]);
+    }, [status, user, userBooks]);
 
     if (booksOnBookshelf.length > 0) {
         return (

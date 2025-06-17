@@ -56,7 +56,7 @@ function BookCard({ book }) {
                         aria-expanded={bookCardOpen ? 'true' : undefined}
                         onClick={handleBookCardClick}
                     >
-                        Add to Bookshelf
+                        Move to Bookshelf
                     </Button>
                     <Menu
                         id="bookcard-menu"
