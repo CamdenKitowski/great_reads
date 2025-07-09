@@ -178,4 +178,53 @@ app.delete('/api/delete-user-book', async (req, res) => {
   }
 });
 
+// Fetch notes (for Notes.jsx)
+app.get('/api/notes', async (req, res) => {
+  const { user_book_id } = req.query;
+  if (!user_book_id) {
+    return res.status(400).json({ error: 'User book ID is required' });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('UserBooks')
+      .select('notes')
+      .eq('user_book_id', user_book_id)
+      .single();
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.json({ notes: data.notes || '<p></p>' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Save notes (for Notes.jsx)
+app.patch('/api/notes', async (req, res) => {
+  const { user_book_id, notes } = req.body;
+  if (!user_book_id || !notes) {
+    return res.status(400).json({ error: 'User book ID and notes are required' });
+  }
+
+  try {
+    const { error } = await supabase
+      .from('UserBooks')
+      .update({ notes })
+      .eq('user_book_id', user_book_id);
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.json({ message: 'Notes saved successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 
