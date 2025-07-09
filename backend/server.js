@@ -1,0 +1,123 @@
+const express = require('express');
+const { createClient } = require('@supabase/supabase-js');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+const port = process.env.PORT || 3001;
+
+// Middleware
+app.use(cors({ origin: 'https://great-reads-bookshelf.vercel.app/' }));
+app.use(express.json());
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
+
+// Test api endpoints 
+app.get('/', (req, res) => {
+  res.send('Backend is running');
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
+
+
+// 1. Fetch User Books
+app.get('/api/user-books', async (req, res) => {
+  const userId = req.query.user_id;
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('UserBooks')
+      .select('Books (key, title, author, cover_i), status')
+      .eq('user_id', userId);
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    const books = data.map(item => ({
+      openLibraryKey: item.Books.key,
+      title: item.Books.title,
+      author: item.Books.author,
+      cover_i: item.Books.cover_i,
+      status: item.status
+    }));
+
+    res.json(books);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+// 2. Set Book Status
+app.post('/api/set-book-status', async (req, res) => {
+  const { user_id, book, status } = req.body;
+  if (!user_id || !book || !status) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    let generatedBookId;
+
+    const { data: existingBook, error: checkError } = await supabase
+      .from('Books')
+      .select('book_id')
+      .eq('key', book.openLibraryKey)
+      .maybeSingle();
+
+    if (checkError && checkError.code !== 'PGRST116') {
+      return res.status(500).json({ error: checkError.message });
+    }
+
+    if (!existingBook) {
+      const { data: newBook, error: insertError } = await supabase
+        .from('Books')
+        .insert([{
+          key: book.openLibraryKey,
+          title: book.title,
+          author: book.author,
+          cover_i: book.cover_i
+        }])
+        .select('book_id')
+        .single();
+
+      if (insertError) {
+        return res.status(500).json({ error: insertError.message });
+      }
+      generatedBookId = newBook.book_id;
+    } else {
+      generatedBookId = existingBook.book_id;
+    }
+
+    const { data, error } = await supabase
+      .from('UserBooks')
+      .upsert({
+        user_id,
+        book_id: generatedBookId,
+        status
+      }, {
+        onConflict: ['user_id', 'book_id']
+      })
+      .select('user_book_id')
+      .single();
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.json({ openLibraryKey: book.openLibraryKey, status });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+

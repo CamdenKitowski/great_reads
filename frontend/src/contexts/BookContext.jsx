@@ -53,6 +53,7 @@ export const BookProvider = ({ children }) => {
     }, [searchQuery]);
 
     // this is for tracking status
+    // fetch books -- api endpoint
     useEffect(() => {
         const fetchUserBooks = async () => {
             if (!user) {
@@ -82,7 +83,7 @@ export const BookProvider = ({ children }) => {
         fetchUserBooks();
     }, [user]);
 
-
+    // set book status -- will be api endpoint
     const setBookStatus = async (book, status) => {
         if (!user) return;
 
@@ -142,7 +143,7 @@ export const BookProvider = ({ children }) => {
         }
     };
 
-
+    // delete book --- api endpoint
     const deleteUserBook = async (book) => {
         if (!user) return;
 
