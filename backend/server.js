@@ -26,7 +26,7 @@ app.listen(port, () => {
 });
 
 
-// 1. Fetch User Books
+// Fetch User Books
 app.get('/api/user-books', async (req, res) => {
   const userId = req.query.user_id;
   if (!userId) {
@@ -57,8 +57,42 @@ app.get('/api/user-books', async (req, res) => {
   }
 });
 
+// Fetch user books by status (new endpoint for Bookshelf.jsx)
+app.get('/api/books-by-status', async (req, res) => {
+  const { user_id, status } = req.query;
+  if (!user_id || !status) {
+    return res.status(400).json({ error: 'User ID and status are required' });
+  }
 
-// 2. Set Book Status
+  try {
+    const { data, error } = await supabase
+      .from('UserBooks')
+      .select('book_id, user_book_id, Books (key, title, author, cover_i)')
+      .eq('user_id', user_id)
+      .eq('status', status);
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    const flattenedBooks = data.map(item => ({
+      user_book_id: item.user_book_id,
+      book_id: item.book_id,
+      openLibraryKey: item.Books.key,
+      title: item.Books.title,
+      author: item.Books.author,
+      cover_i: item.Books.cover_i,
+      url: item.Books.cover_i ? `https://covers.openlibrary.org/b/id/${item.Books.cover_i}-L.jpg` : null
+    }));
+
+    res.json(flattenedBooks);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+// Set Book Status
 app.post('/api/set-book-status', async (req, res) => {
   const { user_id, book, status } = req.body;
   if (!user_id || !book || !status) {
