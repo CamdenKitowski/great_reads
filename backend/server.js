@@ -120,4 +120,28 @@ app.post('/api/set-book-status', async (req, res) => {
   }
 });
 
+// Delete user book
+app.delete('/api/delete-user-book', async (req, res) => {
+  const { user_id, book_id, openLibraryKey } = req.body;
+  if (!user_id || !book_id) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const { error } = await supabase
+      .from('UserBooks')
+      .delete()
+      .eq('user_id', user_id)
+      .eq('book_id', book_id);
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.json({ openLibraryKey });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
