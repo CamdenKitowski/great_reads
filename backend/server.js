@@ -7,7 +7,13 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors({ origin: 'https://great-reads-bookshelf.vercel.app/' }));
+app.use(cors({
+  origin: [
+    'https://great-reads-bookshelf.vercel.app/', 
+    'http://localhost:3001', 
+    'http://localhost:5173'
+  ]
+}));
 app.use(express.json());
 
 // Initialize Supabase client
@@ -99,6 +105,9 @@ app.post('/api/set-book-status', async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  console.log("book " , book);
+  console.log("status " , status);
+
   try {
     let generatedBookId;
 
@@ -107,11 +116,13 @@ app.post('/api/set-book-status', async (req, res) => {
       .select('book_id')
       .eq('key', book.openLibraryKey)
       .maybeSingle();
+    console.log(existingBook, ' this is the existing books');
 
     if (checkError && checkError.code !== 'PGRST116') {
       return res.status(500).json({ error: checkError.message });
     }
 
+    // add book to books table
     if (!existingBook) {
       const { data: newBook, error: insertError } = await supabase
         .from('Books')
@@ -132,6 +143,7 @@ app.post('/api/set-book-status', async (req, res) => {
       generatedBookId = existingBook.book_id;
     }
 
+    // update the status on this book
     const { data, error } = await supabase
       .from('UserBooks')
       .upsert({
