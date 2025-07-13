@@ -14,12 +14,12 @@ function BookCard({ book }) {
     const [bookCardAnchorEl, setbookCardAnchorEl] = useState(null);
     const bookCardOpen = Boolean(bookCardAnchorEl);
     const { setBookStatus, deleteUserBook, getBookStatus } = useContext(BookContext);
-
     const currentStatus = getBookStatus(book.openLibraryKey);
 
     const handleBookCardClick = (event) => {
         setbookCardAnchorEl(event.currentTarget);
     };
+
     const handleBookCardClose = (action) => {
         if (action === 'delete') {
             const confirmDelete = window.confirm('Are you sure you want to remove this book from your bookshelf?');
@@ -40,9 +40,7 @@ function BookCard({ book }) {
         return title;
     };
 
-
     const notesLink = book.user_book_id ? `/notes/${book.user_book_id}` : null;
-
 
     return (
         <div className="book-card">

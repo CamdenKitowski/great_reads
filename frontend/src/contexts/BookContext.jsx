@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-import supabase from "../config/supabaseClient";
 import { AuthContext } from "./AuthContext";
 import { useContext } from 'react';
 import defaultBookCover from '../images/great_reads_dummy.png';
@@ -16,6 +15,9 @@ export const BookProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const API_BASE_URL = 'http://localhost:3001'; // this is where the backend server is running -- need to change this
+
+
     // Get books details from query
     const searchBooks = async (query) => {
         const encodedQuery = encodeURIComponent(query);
@@ -26,7 +28,7 @@ export const BookProvider = ({ children }) => {
             title: doc.title,
             author: doc.author_name ? doc.author_name[0] : "Unknown Author",
             cover_i: doc.cover_i,
-            url: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` :  defaultBookCover,
+            url: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : defaultBookCover,
 
         }));
         console.log("Books fetched:", books);
@@ -61,24 +63,30 @@ export const BookProvider = ({ children }) => {
                 return;
             }
 
-            setLoading(true);
-            const { data, error } = await supabase
-                .from("UserBooks")
-                .select("Books (key), status")
-                .eq("user_id", user.id);
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/user-books?user_id=${user.id}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
 
-            if (error) {
-                console.error("Error fetching user books: ", error.message);
-                setUserBooks({});
-            } else {
-                const map = {};
+                // Transform array to map
+                const userBooksMap = {};
                 data.forEach((item) => {
-                    const key = item.Books.key;
-                    map[key] = item.status;
+                    if (item.openLibraryKey) {
+                        // maps key to status
+                        userBooksMap[item.openLibraryKey] = item.status;
+                    }
                 });
-                setUserBooks(map);
+                setUserBooks(userBooksMap);
+                setError(null);
+            } catch (err) {
+                console.error("Error fetching user books:", err.message);
+                setUserBooks({});
+                setError("Failed to fetch user books. Please try again later.");
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
         fetchUserBooks();
     }, [user]);
@@ -87,59 +95,31 @@ export const BookProvider = ({ children }) => {
     const setBookStatus = async (book, status) => {
         if (!user) return;
 
-        let generatedBookId;
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/set-book-status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    book: book,
+                    status,
+                }),
+            });
 
-        const { data: existingBook, error: checkError } = await supabase
-            .from('Books')
-            .select('book_id')
-            .eq('key', book.openLibraryKey)
-            .maybeSingle();
-
-        if (checkError && checkError.code !== 'PGRST116') {
-            console.error('Error checking book in Books:', checkError.message);
-            return;
-        }
-
-        if (!existingBook) {
-            const { data: newBook, error: insertError } = await supabase
-                .from('Books')
-                .insert([{
-                    key: book.openLibraryKey,
-                    title: book.title,
-                    author: book.author,
-                    cover_i: book.cover_i
-                }])
-                .select('book_id')
-                .single();
-            if (insertError) {
-                console.error('Error adding book to Books:', insertError.message);
-                return;
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-            generatedBookId = newBook.book_id;
-        } else {
-            generatedBookId = existingBook.book_id;
-        }
 
-        const { data, error } = await supabase
-            .from('UserBooks')
-            .upsert({
-                user_id: user.id,
-                book_id: generatedBookId,
-                status: status
-            }, {
-                onConflict: ['user_id', 'book_id']
-            })
-            .select('user_book_id')
-            .single();
-
-        if (error) {
-            console.error(`Error adding book to ${status}:`, error.message);
-        } else {
+            const data = await response.json();
             console.log(`Set ${book.title} to ${status} in database`);
             setUserBooks((prev) => ({
                 ...prev,
-                [book.openLibraryKey]: status
+                [book.openLibraryKey]: status,
             }));
+        } catch (err) {
+            console.error(`Error adding book to ${status}:`, err.message);
         }
     };
 
@@ -147,24 +127,33 @@ export const BookProvider = ({ children }) => {
     const deleteUserBook = async (book) => {
         if (!user) return;
 
-        const { data: bookData, error: fetchError } = await supabase
-            .from('UserBooks')
-            .delete()
-            .eq('user_id', user.id)
-            .eq('book_id', book.book_id)
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/delete-user-book`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    book_id: book.book_id,
+                    openLibraryKey: book.openLibraryKey,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-        if (fetchError) {
-            console.log(`Error removing ${book.title} `, fetchError.message);
-            return
-        } else {
+            const data = await response.json();
             console.log(`Removed ${book.title} in database`);
             setUserBooks((prev) => {
                 const updated = { ...prev };
                 delete updated[book.openLibraryKey];
                 return updated;
             });
+        } catch (err) {
+            console.error(`Error removing ${book.title}:`, err.message);
         }
-    }
+    };
 
     const getBookStatus = (openLibraryKey) => userBooks[openLibraryKey] || [];
 
