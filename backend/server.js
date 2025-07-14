@@ -63,7 +63,7 @@ app.get('/api/user-books', async (req, res) => {
   }
 });
 
-// Fetch user books by status (new endpoint for Bookshelf.jsx)
+// Fetch user books by status -- endpoint for Bookshelf.jsx
 app.get('/api/books-by-status', async (req, res) => {
   const { user_id, status } = req.query;
   if (!user_id || !status) {
@@ -190,7 +190,7 @@ app.delete('/api/delete-user-book', async (req, res) => {
   }
 });
 
-// Fetch notes (for Notes.jsx)
+// Fetch notes -- endpoint for Notes.jsx
 app.get('/api/notes', async (req, res) => {
   const { user_book_id } = req.query;
   if (!user_book_id) {
@@ -214,7 +214,7 @@ app.get('/api/notes', async (req, res) => {
   }
 });
 
-// Save notes (for Notes.jsx)
+// Save notes -- endpoint for Notes.jsx
 app.patch('/api/notes', async (req, res) => {
   const { user_book_id, notes } = req.body;
   if (!user_book_id || !notes) {
@@ -232,6 +232,84 @@ app.patch('/api/notes', async (req, res) => {
     }
 
     res.json({ message: 'Notes saved successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+// Authentication for Supbase 
+app.post('/api/auth/signin', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      return res.status(401).json({ error: error.message });
+    }
+    res.json({ user: data.user, session: data.session });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/auth/signup', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
+  try {
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+    res.json({ user: data.user, session: data.session });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/auth/signout', async (req, res) => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    res.json({ message: 'Signed out successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/auth/reset-password', async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: 'Password reset email sent' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/auth/session', async (req, res) => {
+  const { access_token } = req.query;
+  if (!access_token) {
+    return res.status(400).json({ error: 'Access token is required' });
+  }
+  try {
+    const { data, error } = await supabase.auth.getUser(access_token);
+    if (error) {
+      return res.status(401).json({ error: error.message });
+    }
+    res.json({ user: data.user });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
   }

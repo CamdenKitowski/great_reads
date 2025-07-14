@@ -1,37 +1,120 @@
-import { createContext , useState, useEffect } from "react";
-import supabase from "../config/supabaseClient";
+import { createContext, useState, useEffect, useContext } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const API_BASE_URL = 'http://localhost:3001'; // this is where the backend server is running -- need to change this
 
     useEffect(() => {
-
         const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            setUser(session?.user || null);
+            const accessToken = localStorage.getItem('access_token');
+            if (!accessToken) {
+                setUser(null);
+                return;
+            }
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/session?access_token=${accessToken}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const { user } = await response.json();
+                setUser(user || null);
+            } catch (err) {
+                console.error('Error fetching session:', err.message);
+                setUser(null);
+                localStorage.removeItem('access_token');
+            }
         };
         getSession();
 
-        const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-            setUser(session?.user || null);
-            
-        });
+        // No auth state change listener needed since session is managed server-side
+    }, [API_BASE_URL]);
+    const signIn = async (data) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/signin`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+            if (!response.ok) {
+                const { error } = await response.json();
+                throw new Error(error || 'Sign-in failed');
+            }
+            const { user, session } = await response.json();
+            localStorage.setItem('access_token', session.access_token);
+            setUser(user);
+            return { data: { user, session }, error: null };
+        } catch (err) {
+            console.error('Sign-in error:', err.message);
+            return { data: null, error: err.message };
+        }
+    };
 
-        return () => {
-            authListener.subscription.unsubscribe();
-        };
-    }, []);
+    const signUp = async (data) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+            if (!response.ok) {
+                const { error } = await response.json();
+                throw new Error(error || 'Sign-up failed');
+            }
+            const { user, session } = await response.json();
+            localStorage.setItem('access_token', session.access_token);
+            setUser(user);
+            return { data: { user, session }, error: null };
+        } catch (err) {
+            console.error('Sign-up error:', err.message);
+            return { data: null, error: err.message };
+        }
+    };
 
-    
+    const signOut = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/signout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (!response.ok) {
+                throw new Error('Sign-out failed');
+            }
+            localStorage.removeItem('access_token');
+            setUser(null);
+            return { error: null };
+        } catch (err) {
+            console.error('Sign-out error:', err.message);
+            return { error: err.message };
+        }
+    };
+
+    const resetPassword = async (email) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+            if (!response.ok) {
+                const { error } = await response.json();
+                throw new Error(error || 'Password reset failed');
+            }
+            return { error: null };
+        } catch (err) {
+            console.error('Password reset error:', err.message);
+            return { error: err.message };
+        }
+    };
 
     const value = {
         user,
-        signIn: (data) => supabase.auth.signInWithPassword(data),
-        signUp: (data) => supabase.auth.signUp(data),
-        signOut: () => supabase.auth.signOut(),
-        resetPassword: (email) => supabase.auth.resetPasswordForEmail(email),
+        signIn,
+        signUp,
+        signOut,
+        resetPassword,
+        API_BASE_URL,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

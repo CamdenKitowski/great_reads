@@ -3,7 +3,6 @@ import { AuthContext } from "./AuthContext";
 import { useContext } from 'react';
 import defaultBookCover from '../images/great_reads_dummy.png';
 
-
 export const BookContext = createContext();
 
 export const BookProvider = ({ children }) => {
@@ -14,9 +13,7 @@ export const BookProvider = ({ children }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const API_BASE_URL = 'http://localhost:3001'; // this is where the backend server is running -- need to change this
-
+    const { API_BASE_URL } = useContext(AuthContext);
 
     // Get books details from query
     const searchBooks = async (query) => {

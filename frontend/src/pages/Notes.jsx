@@ -1,13 +1,9 @@
 import "../css/Notes.css";
-
 import { useParams, useLocation } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
-import supabase from '../config/supabaseClient';
 import { useEditor, EditorContent, } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { BookContext } from '../contexts/BookContext';
-
-
+import { AuthContext } from '../contexts/AuthContext';
 
 function Notes() {
 
@@ -15,14 +11,13 @@ function Notes() {
     const location = useLocation(); // get navigation contents with any passed state
     const book = location.state?.book; // Get the book from the state passed by the BookCard component
     const [loading, setLoading] = useState(true); // might not need this, but it helps with the loading state
-    const { API_BASE_URL } = useContext(BookContext);
+    const { API_BASE_URL } = useContext(AuthContext);
 
     // could make this a separate component later
     const editor = useEditor({
         extensions: [StarterKit],
         content: '<p></p>',
     });
-
 
     useEffect(() => {
         const fetchNotes = async () => {

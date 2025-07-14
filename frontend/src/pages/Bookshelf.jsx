@@ -3,7 +3,6 @@ import { AuthContext } from "../contexts/AuthContext";
 import { BookContext } from "../contexts/BookContext";
 import { useParams } from "react-router-dom";
 import "../css/Bookshelf.css";
-import supabase from "../config/supabaseClient";
 import BookCard from "../components/BookCard";
 
 
@@ -11,9 +10,8 @@ function Bookshelf() {
     const { status } = useParams();
     const [booksOnBookshelf, setBooksOnBookshelf] = useState([]);
     const { user } = useContext(AuthContext);
+    const { API_BASE_URL } = useContext(AuthContext);
     const { userBooks } = useContext(BookContext);
-    const { API_BASE_URL } = useContext(BookContext);
-
 
     useEffect(() =>  {
         if (!user) {
@@ -28,7 +26,6 @@ function Bookshelf() {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status ${response.status}`);
                 }
-                console.log("this is the response " , response);
                 const data = await response.json();
                 setBooksOnBookshelf(data || []);
             } catch (error) {
