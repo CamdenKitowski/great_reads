@@ -1,10 +1,12 @@
 import "../css/Notes.css";
 
 import { useParams, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import supabase from '../config/supabaseClient';
 import { useEditor, EditorContent, } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { BookContext } from '../contexts/BookContext';
+
 
 
 function Notes() {
@@ -13,7 +15,7 @@ function Notes() {
     const location = useLocation(); // get navigation contents with any passed state
     const book = location.state?.book; // Get the book from the state passed by the BookCard component
     const [loading, setLoading] = useState(true); // might not need this, but it helps with the loading state
-
+    const { API_BASE_URL } = useContext(BookContext);
 
     // could make this a separate component later
     const editor = useEditor({
@@ -23,27 +25,26 @@ function Notes() {
 
 
     useEffect(() => {
-        console.log(user_book_id);
         const fetchNotes = async () => {
-            console.log('in here')
-            console.log('Fetching notes for user_book_id:', user_book_id);
             if (!user_book_id) {
                 console.error('user_book_id is undefined');
                 setLoading(false);
                 return;
             }
-            const { data, error } = await supabase
-                .from('UserBooks')
-                .select('notes')
-                .eq('user_book_id', user_book_id)
-                .single();
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/notes?user_book_id=${user_book_id}`);
 
-            if (error) {
-                console.error('Error fetching notes:', error.message);
-            } else {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
                 editor?.commands.setContent(data?.notes || '<p></p>');
+            } catch (err) {
+                console.error('Error fetching notes:', err.message);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
         fetchNotes();
     }, [user_book_id, editor]);
@@ -54,17 +55,27 @@ function Notes() {
             console.error('user_book_id or editor is undefined');
             return;
         }
-        const { error } = await supabase
-            .from('UserBooks')
-            .update({ notes: editor.getHTML() }) // what does this mean??
-            .eq('user_book_id', user_book_id);
 
-        if (error) {
-            console.error('Error saving notes:', error.message);
-        } else {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/notes`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_book_id,
+                    notes: editor.getHTML(),
+                }),
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+
+            }
             console.log('Notes saved successfully');
+        } catch (error) {
+            console.error('Error saving notes:', error.message);
         }
-    }
+    };
 
     return (
         <div className="notes-container">

@@ -166,7 +166,8 @@ export const BookProvider = ({ children }) => {
         setBookStatus,
         deleteUserBook,
         getBookStatus,
-        userBooks
+        userBooks,
+        API_BASE_URL
     };
 
     return (
