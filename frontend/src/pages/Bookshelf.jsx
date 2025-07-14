@@ -12,6 +12,7 @@ function Bookshelf() {
     const [booksOnBookshelf, setBooksOnBookshelf] = useState([]);
     const { user } = useContext(AuthContext);
     const { userBooks } = useContext(BookContext);
+    const { API_BASE_URL } = useContext(BookContext);
 
 
     useEffect(() =>  {
@@ -21,30 +22,21 @@ function Bookshelf() {
         }
 
         const fetchBooksOnBookshelf = async() => {
-            const { data, error } = await supabase
-                .from('UserBooks')
-                .select('book_id, user_book_id, Books (key, title, author, cover_i)')
-                .eq('user_id', user.id)
-                .eq('status', status);
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/books-by-status?user_id=${user.id}&status=${status}`);
 
-            if (error) {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status ${response.status}`);
+                }
+                console.log("this is the response " , response);
+                const data = await response.json();
+                setBooksOnBookshelf(data || []);
+            } catch (error) {
                 console.error(`Error fetching books for status "${status}":`, error.message);
                 setBooksOnBookshelf([]);
-            } else {
-                const flattenedBooks = data.map(item => ({
-                    user_book_id: item.user_book_id,
-                    book_id: item.book_id,
-                    openLibraryKey: item.Books.key,
-                    title: item.Books.title,
-                    author: item.Books.author,
-                    cover_i: item.Books.cover_i,
-                    url: `https://covers.openlibrary.org/b/id/${item.Books.cover_i}-L.jpg`
-                }));
-                setBooksOnBookshelf(flattenedBooks || []);
             }
         };        
         fetchBooksOnBookshelf();
-
     }, [status, user, userBooks]);
 
     if (booksOnBookshelf.length > 0) {
