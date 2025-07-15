@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const getSession = async () => {
+            // this access token is the JWT token to authenticate request - it is not my supabase key
             const accessToken = localStorage.getItem('access_token');
             if (!accessToken) {
                 setUser(null);
