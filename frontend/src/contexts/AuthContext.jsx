@@ -4,7 +4,8 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const API_BASE_URL = 'http://localhost:3001'; // this is where the backend server is running -- need to change this
+    const API_BASE_URL = 'https://great-reads-bookshelf.vercel.app/'
+    // const API_BASE_URL = 'http://localhost:3001'; // this is where the backend server is running -- need to change this
 
     useEffect(() => {
         const getSession = async () => {
