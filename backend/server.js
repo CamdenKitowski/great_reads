@@ -9,7 +9,7 @@ const port = process.env.PORT || 3001;
 // Middleware
 app.use(cors({
   origin: [
-    'https://great-reads-bookshelf.vercel.app/', 
+    'https://great-reads-bookshelf.vercel.app', 
     'http://localhost:3001', 
     'http://localhost:5173'
   ]
@@ -27,9 +27,9 @@ app.get('/', (req, res) => {
   res.send('Backend is running');
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running on port ${port}`);
+// });
 
 
 // Fetch User Books
