@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useContext } from 'react';
 import { BookContext } from '../contexts/BookContext';
+import { AuthContext } from '../contexts/AuthContext';
 import "../css/NavBar.css";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -15,6 +16,8 @@ function NavBar() {
     const [bookshelfAnchorEl, setBookshelfAnchorEl] = useState(null);
     const bookshelfOpen = Boolean(bookshelfAnchorEl);
     const { setSearchQuery } = useContext(BookContext);
+    const { signOut } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleBookshelfClick = (event) => {
         setBookshelfAnchorEl(event.currentTarget);
@@ -38,6 +41,20 @@ function NavBar() {
         const query = event.target.elements.search.value;
         setSearchQuery(query);
         event.target.reset();
+    }
+
+    const handleLogOut = async (e) => {
+        try {
+            const { error } = await signOut();
+            if (error) {
+                console.error("Sign out failed: ", error);
+                return;
+            }
+            console.log('You logged out');
+            navigate('/');
+        } catch (err) {
+            console.error("Sign out error: ", err.message);
+        }
     }
 
     return (<div className="navbar">
@@ -65,7 +82,7 @@ function NavBar() {
                     aria-expanded={bookshelfOpen ? 'true' : undefined}
                     onClick={handleBookshelfClick}
                 >
-                    Bookshelf   
+                    Bookshelf
                 </Button>
                 <Menu
                     id="bookshelf-menu"
@@ -77,7 +94,7 @@ function NavBar() {
                             'aria-labelledby': 'bookshelf-button',
                         },
                     }}
-                disableScrollLock={true}
+                    disableScrollLock={true}
 
                 >
                     <MenuItem component={Link} to="/bookshelf/wishlist" onClick={handleBookshelfClose}>
@@ -120,7 +137,7 @@ function NavBar() {
                         Friends
                     </MenuItem>
                     <Divider />
-                    <MenuItem component={Link} to="/home" onClick={handleProfileClose}>
+                    <MenuItem onClick={() => { handleLogOut(); handleProfileClose(); }}>
                         Log out
                     </MenuItem>
                 </Menu>
