@@ -9,7 +9,8 @@ const port = process.env.PORT || 3001;
 // Middleware
 app.use(cors({
   origin: [
-    'https://great-reads-bookshelf.vercel.app', 
+    'https://great-reads-bookshelf.vercel.app',
+    'https://great-reads-git-main-camdenkitowski-projects.vercel.app',
     'http://localhost:3001', 
     'http://localhost:5173'
   ]
