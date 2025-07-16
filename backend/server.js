@@ -26,7 +26,7 @@ const supabase = createClient(
 );
  
 app.get('/', (req, res) => {
-  return "This is the backend..."
+  res.send("This is the backend");
 });
 
 // app.listen(port, () => {
