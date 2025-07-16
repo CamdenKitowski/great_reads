@@ -11,8 +11,8 @@ app.use(cors({
   origin: [
     'https://great-reads-bookshelf.vercel.app',
     'https://great-reads-git-main-camdenkitowski-projects.vercel.app',
-    'https://great-reads-backend.vercel.app/',
-    'https://great-reads-backend-git-main-camdenkitowskis-projects.vercel.app/',
+    'https://great-reads-backend.vercel.app',
+    'https://great-reads-backend-git-main-camdenkitowskis-projects.vercel.app',
     'http://localhost:3001', 
     'http://localhost:5173'
   ]
