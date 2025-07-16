@@ -24,10 +24,9 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
-
-// Test api endpoints 
+ 
 app.get('/', (req, res) => {
-  res.send('Backend is running');
+  return "This is the backend..."
 });
 
 // app.listen(port, () => {
