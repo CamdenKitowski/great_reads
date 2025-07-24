@@ -30,9 +30,9 @@ app.get('/', (req, res) => {
   res.send("This is the backend");
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running on port ${port}`);
+// });
 
 
 // Fetch User Books
@@ -295,8 +295,8 @@ app.post('/api/auth/reset-password', async (req, res) => {
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       // This is the link in the email
-      // redirectTo: 'https://great-reads-bookshelf.vercel.app/resetPassword'  
-      redirectTo: 'http://localhost:5173/resetPassword' // TODO: change this for PROD
+      redirectTo: 'https://great-reads-bookshelf.vercel.app/resetPassword'
+      // redirectTo: 'http://localhost:5173/resetPassword' // TODO: change this for PROD
     });
     if (error) {
       return res.status(400).json({ error: error.message });
@@ -310,7 +310,6 @@ app.post('/api/auth/reset-password', async (req, res) => {
 
 app.post('/api/auth/reset-password-confirm', async (req, res) => {
   const { token, newPassword } = req.body;
-  console.log("Received token:", token, "newPassword:", newPassword); // Debug log
   if (!token || !newPassword) {
     return res.status(400).json({ error: 'Token and new password are required' });
   }
@@ -331,9 +330,6 @@ app.post('/api/auth/reset-password-confirm', async (req, res) => {
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_KEY
     );
-
-    console.log("this is the user ID: ", userId);
-    console.log("PASSWORD: ", newPassword);
 
     // Update the user's password directly
     const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, { password: newPassword });
@@ -364,5 +360,4 @@ app.get('/api/auth/session', async (req, res) => {
   }
 });
 
-
-// module.exports = app; 
+module.exports = app;
