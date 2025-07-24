@@ -4,17 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "../css/Login.css";
 
-
 function Login() {
+
     const { signIn } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-
+    
     const handleLogin = async (e) => {
         e.preventDefault();
-        // Call signIn and destructure the response
         const { data, error } = await signIn({ email, password });
         
         if (error) {
@@ -23,9 +22,7 @@ function Login() {
         } else {
             navigate("/home");
         }
-    };
-
-    
+    }; 
 
     return (
         <div className="user-detail-container">

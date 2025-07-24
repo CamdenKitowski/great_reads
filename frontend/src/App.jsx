@@ -12,7 +12,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { BookProvider } from './contexts/BookContext';
 import { AuthProvider } from './contexts/AuthContext';
 
-
 function App() {
 
   const location = useLocation();

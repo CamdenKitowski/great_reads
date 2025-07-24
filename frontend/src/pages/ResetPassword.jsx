@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/ResetPassword.css";
 
 function ResetPassword() {
+    
     const { updatePassword } = useContext(AuthContext);
     const [newPassword, setNewPassword] = useState("");
     const [message, setMessage] = useState("");

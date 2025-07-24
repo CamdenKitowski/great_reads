@@ -15,15 +15,11 @@
 .navbar-content {
   width: 90%;
   margin: 0 auto;
-  /* Center the container */
   padding: 0 .25rem 0 1rem;
-  /* top right bottom left */
   display: flex;
   justify-content: space-between;
-  /* Spread out brand, search, and links */
   align-items: center;
   box-sizing: border-box;
-  /* Ensure padding doesn’t affect width */
 }
 
 .navbar-brand {
@@ -60,7 +56,6 @@
 #profile-button:active,
 #profile-button:focus {
   outline: none !important;
-  /* Remove default outline if present */
 }
 
 

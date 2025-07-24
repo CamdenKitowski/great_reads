@@ -10,10 +10,9 @@ function Notes() {
     const { user_book_id } = useParams(); // get the user_book_id from the URL parameters
     const location = useLocation(); // get navigation contents with any passed state
     const book = location.state?.book; // Get the book from the state passed by the BookCard component
-    const [loading, setLoading] = useState(true); // might not need this, but it helps with the loading state
+    const [loading, setLoading] = useState(true);
     const { API_BASE_URL } = useContext(AuthContext);
-
-    // could make this a separate component later
+    
     const editor = useEditor({
         extensions: [StarterKit],
         content: '<p></p>',
@@ -28,11 +27,9 @@ function Notes() {
             }
             try {
                 const response = await fetch(`${API_BASE_URL}/api/notes?user_book_id=${user_book_id}`);
-
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
                 const data = await response.json();
                 editor?.commands.setContent(data?.notes || '<p></p>');
             } catch (err) {

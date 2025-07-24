@@ -4,16 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import '../css/Signup.css';
 
 function Signup() {
+
     const { signUp } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     
-
-    // make more descriptive error messages 
     const handleSignup = async (e) => {
         e.preventDefault();
-        // Call signIn and destructure the response
         const { data, error } = await signUp({ email, password });
         
         if (error) {
@@ -23,7 +21,6 @@ function Signup() {
             navigate("/home");
         }
     };
-
 
     return (
         <div className="user-detail-container">

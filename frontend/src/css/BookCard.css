@@ -75,7 +75,6 @@
 
 .book-notes {
   flex: 0 0 auto;
-  /* Each takes equal space; adjust as needed */
   padding-right: 35px;
 }
 

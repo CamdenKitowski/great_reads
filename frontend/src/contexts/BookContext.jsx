@@ -28,7 +28,6 @@ export const BookProvider = ({ children }) => {
             url: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : defaultBookCover,
 
         }));
-        console.log("Books fetched:", books);
         return books;
     };
 
@@ -51,8 +50,7 @@ export const BookProvider = ({ children }) => {
         loadSearchResults();
     }, [searchQuery]);
 
-    // this is for tracking status
-    // fetch books -- api endpoint
+    // fetch books -- this is for tracking status
     useEffect(() => {
         const fetchUserBooks = async () => {
             if (!user) {
@@ -88,7 +86,7 @@ export const BookProvider = ({ children }) => {
         fetchUserBooks();
     }, [user]);
 
-    // set book status -- will be api endpoint
+    // Set book status
     const setBookStatus = async (book, status) => {
         if (!user) return;
 
@@ -120,7 +118,7 @@ export const BookProvider = ({ children }) => {
         }
     };
 
-    // delete book --- api endpoint
+    // Delete book
     const deleteUserBook = async (book) => {
         if (!user) return;
 

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/EnterEmail.css";
 
 function EnterEmail() {
+    
     const { resetPassword } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
@@ -24,7 +25,7 @@ function EnterEmail() {
             } else {
                 setMessage(data.message || "Password reset email sent. Check your inbox.");
                 setIsError(false);
-                // Optionally navigate back to login after success
+                // Navigate back to login page after success
                 setTimeout(() => navigate("/"), 3000);
             }
         } catch (err) {

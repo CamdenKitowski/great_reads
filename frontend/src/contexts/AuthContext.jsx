@@ -3,10 +3,11 @@ import { createContext, useState, useEffect, useContext } from "react";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    
+    // Change to 'http://localhost:3001' for dev - this is where the backend server is running
+    const API_BASE_URL = 'https://great-reads-backend.vercel.app'
     const [user, setUser] = useState(null);
-    const API_BASE_URL = 'https://great-reads-backend.vercel.app' // backend project URL
-    // const API_BASE_URL = 'http://localhost:3001'; // this is where the backend server is running -- need to change this
-
+    
     useEffect(() => {
         const getSession = async () => {
             // this access token is the JWT token to authenticate request - it is not my supabase key
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }) => {
 
         // No auth state change listener needed since session is managed server-side
     }, [API_BASE_URL]);
+
     const signIn = async (data) => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/auth/signin`, {
@@ -142,5 +144,4 @@ export const AuthProvider = ({ children }) => {
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-
 }

@@ -30,11 +30,6 @@ app.get('/', (req, res) => {
   res.send("This is the backend");
 });
 
-// app.listen(port, () => {
-//   console.log(`Server running on port ${port}`);
-// });
-
-
 // Fetch User Books
 app.get('/api/user-books', async (req, res) => {
   const userId = req.query.user_id;
@@ -66,7 +61,7 @@ app.get('/api/user-books', async (req, res) => {
   }
 });
 
-// Fetch user books by status -- endpoint for Bookshelf.jsx
+// Fetch user books by status
 app.get('/api/books-by-status', async (req, res) => {
   const { user_id, status } = req.query;
   if (!user_id || !status) {
@@ -193,7 +188,7 @@ app.delete('/api/delete-user-book', async (req, res) => {
   }
 });
 
-// Fetch notes -- endpoint for Notes.jsx
+// Fetch notes
 app.get('/api/notes', async (req, res) => {
   const { user_book_id } = req.query;
   if (!user_book_id) {
@@ -217,7 +212,7 @@ app.get('/api/notes', async (req, res) => {
   }
 });
 
-// Save notes -- endpoint for Notes.jsx
+// Save notes
 app.patch('/api/notes', async (req, res) => {
   const { user_book_id, notes } = req.body;
   if (!user_book_id || !notes) {
@@ -286,6 +281,7 @@ app.post('/api/auth/signout', async (req, res) => {
   }
 });
 
+// Send email to user for password reset
 app.post('/api/auth/reset-password', async (req, res) => {
   const { email } = req.body;
   if (!email) {
@@ -294,9 +290,8 @@ app.post('/api/auth/reset-password', async (req, res) => {
   console.log('Sending message to this email: ', email);
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      // This is the link in the email
-      redirectTo: 'https://great-reads-bookshelf.vercel.app/resetPassword'
-      // redirectTo: 'http://localhost:5173/resetPassword' // TODO: change this for PROD
+      // Change to 'http://localhost:5173/resetPassword' for dev
+      redirectTo: 'https://great-reads-bookshelf.vercel.app/resetPassword' 
     });
     if (error) {
       return res.status(400).json({ error: error.message });
@@ -319,13 +314,14 @@ app.post('/api/auth/reset-password-confirm', async (req, res) => {
     if (!decoded || !decoded.sub || !decoded.exp) {
       return res.status(400).json({ error: 'Invalid token' });
     }
-    const userId = decoded.sub; // 'sub' is the user ID in Supabase JWTs
+    // 'sub' is the user ID in Supabase JWTs
+    const userId = decoded.sub; 
     const currentTime = Math.floor(Date.now() / 1000);
     if (decoded.exp < currentTime) {
       return res.status(400).json({ error: 'Token has expired' });
     }
 
-    // Create a Supabase client with the service role key (admin privileges)
+    // Admin priveleges for supabase
     const supabaseAdmin = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_KEY

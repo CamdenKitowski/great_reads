@@ -12,20 +12,19 @@
    max-width: 1000px;
    align-items: center;
    gap: 40px;
-   /* background-color: rgb(76, 0, 255); */
    justify-content: center;
 }
 
 
 .note-book-cover {
-    width: 250px; /* Fixed width for the book cover */
+    width: 250px; 
 }
 
 .note-book-cover img {
-    width: 100%;      /* Fills the container */
-    height: auto;     /* Maintains aspect ratio */
-    max-width: 250px; /* Ensures image doesn’t exceed container */
-    display: block;   /* Removes any inline spacing issues */
+    width: 100%;     
+    height: auto; 
+    max-width: 250px;
+    display: block;
     border-radius: 8px;
 }
 
@@ -35,16 +34,16 @@
     display: flex;
     gap: 3px;
     padding: 10px;
-    background-color: white; /* Matches editor background */
-    border-bottom: 1px solid #ddd; /* Subtle separation from editor content */
+    background-color: white;
+    border-bottom: 1px solid #ddd;
     justify-content: center;;
-    border-radius: 4px 4px 0 0; /* Rounded corners for the top */
+    border-radius: 4px 4px 0 0;
 }
 
 .toolbar button {
     padding: 8px 15px;
     border: 1px solid #ccc;
-    background-color: #f1f1f1; /* Light gray for a modern button look */
+    background-color: #f1f1f1;
     color: black;
     cursor: pointer;
     border-radius: 4px;
@@ -53,7 +52,7 @@
 }
 
 .toolbar button:hover {
-    background-color: #e9ecef; /* Slightly darker on hover */
+    background-color: #e9ecef;
 }
 
 .toolbar button.is-active {
@@ -68,23 +67,22 @@
 }
 
 .prose {
-    /* Target the editor content */
-    background-color: white; /* White background */
-    color: black; /* Black text */
+    background-color: white;
+    color: black;
     padding: 10px;
-    border: 1px solid #ddd; /* Optional border to define the editor area */
-    border-top: none; /* Remove top border to blend with toolbar */
-    min-height: 200px; /* Ensure some height for visibility */
-    border-radius: 0 0 4px 4px; /* Rounded corners for the bottom */
+    border: 1px solid #ddd;
+    border-top: none;
+    min-height: 200px;
+    border-radius: 0 0 4px 4px;
 }
 
 .prose [contenteditable]:focus,
 .prose:focus {
-    outline: none; /* Remove default outline */
-    outline-style: none; /* Additional safeguard */
-    outline-width: 0; /* Explicitly set to zero */
-    box-shadow: none; /* Remove any box shadow that might mimic an outline */
-    border-color: #ddd; /* Keep the existing border color */
+    outline: none;
+    outline-style: none;
+    outline-width: 0;
+    box-shadow: none;
+    border-color: #ddd;
 }
 
 .save-button {
