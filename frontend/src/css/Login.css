@@ -59,10 +59,16 @@
     transform: translateY(0);
 }
 
-.user-detail-container p {
+#sign-up {
+    margin-bottom: 0rem;
     margin-top: 15px;
     color: #666;
     font-size: 0.9rem;
+}
+
+#forgot-password {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .user-detail-container a {

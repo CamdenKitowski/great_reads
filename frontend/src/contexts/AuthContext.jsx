@@ -4,8 +4,8 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const API_BASE_URL = 'https://great-reads-backend.vercel.app' // backend project URL
-    // const API_BASE_URL = 'http://localhost:3001'; // this is where the backend server is running -- need to change this
+    // const API_BASE_URL = 'https://great-reads-backend.vercel.app' // backend project URL
+    const API_BASE_URL = 'http://localhost:3001'; // this is where the backend server is running -- need to change this
 
     useEffect(() => {
         const getSession = async () => {
@@ -103,10 +103,31 @@ export const AuthProvider = ({ children }) => {
                 const { error } = await response.json();
                 throw new Error(error || 'Password reset failed');
             }
-            return { error: null };
+            const { message } = await response.json(); // Extract message from response
+            console.log('Sending message to this email: ', email);
+            return { data: { message }, error: null };
         } catch (err) {
             console.error('Password reset error:', err.message);
-            return { error: err.message };
+            return { data: null, error: err.message };
+        }
+    };
+
+    const updatePassword = async (token, newPassword) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/reset-password-confirm`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, newPassword }),
+            });
+            if (!response.ok) {
+                const { error } = await response.json();
+                throw new Error(error || 'Password update failed');
+            }
+            const { message } = await response.json();
+            return { data: { message }, error: null };
+        } catch (err) {
+            console.error('Password update error:', err.message);
+            return { data: null, error: err.message };
         }
     };
 
@@ -116,6 +137,7 @@ export const AuthProvider = ({ children }) => {
         signUp,
         signOut,
         resetPassword,
+        updatePassword,
         API_BASE_URL,
     };
 

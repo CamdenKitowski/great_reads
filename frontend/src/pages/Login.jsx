@@ -1,13 +1,14 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../css/Login.css";
 
 
 function Login() {
-    
     const { signIn } = useContext(AuthContext);
     const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
@@ -23,6 +24,8 @@ function Login() {
             navigate("/home");
         }
     };
+
+    
 
     return (
         <div className="user-detail-container">
@@ -44,8 +47,11 @@ function Login() {
                 />
                 <button type="submit">Log In</button>
             </form>
-            <p>
+            <p id="sign-up">
                 Don’t have an account? <a href="/signup">Sign Up</a>
+            </p>
+            <p id="forgot-password">
+                <Link to="/enterEmail">Forgot Password?</Link>
             </p>
         </div>
     )

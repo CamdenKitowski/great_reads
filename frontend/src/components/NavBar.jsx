@@ -16,7 +16,7 @@ function NavBar() {
     const [bookshelfAnchorEl, setBookshelfAnchorEl] = useState(null);
     const bookshelfOpen = Boolean(bookshelfAnchorEl);
     const { setSearchQuery } = useContext(BookContext);
-    const { signOut } = useContext(AuthContext);
+    const { signOut, user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleBookshelfClick = (event) => {
@@ -56,6 +56,8 @@ function NavBar() {
             console.error("Sign out error: ", err.message);
         }
     }
+
+    const firstChar = user ? user.email.charAt(0).toUpperCase() : 'P';
 
     return (<div className="navbar">
         <div className='navbar-content'>
@@ -116,7 +118,7 @@ function NavBar() {
                     aria-expanded={profileOpen ? 'true' : undefined}
                     onClick={handleProfileClick}
                 >
-                    C
+                    {firstChar}
                 </Button>
                 <Menu
                     id="profile-menu"
@@ -130,13 +132,6 @@ function NavBar() {
                     }}
                     disableScrollLock={true}
                 >
-                    <MenuItem component={Link} to="/home" onClick={handleProfileClose}>
-                        Profile
-                    </MenuItem>
-                    <MenuItem component={Link} to="/home" onClick={handleProfileClose}>
-                        Friends
-                    </MenuItem>
-                    <Divider />
                     <MenuItem onClick={() => { handleLogOut(); handleProfileClose(); }}>
                         Log out
                     </MenuItem>

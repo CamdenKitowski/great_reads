@@ -1,6 +1,7 @@
 const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
@@ -29,9 +30,9 @@ app.get('/', (req, res) => {
   res.send("This is the backend");
 });
 
-// app.listen(port, () => {
-//   console.log(`Server running on port ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
 
 
 // Fetch User Books
@@ -290,14 +291,60 @@ app.post('/api/auth/reset-password', async (req, res) => {
   if (!email) {
     return res.status(400).json({ error: 'Email is required' });
   }
+  console.log('Sending message to this email: ', email);
   try {
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      // This is the link in the email
+      // redirectTo: 'https://great-reads-bookshelf.vercel.app/resetPassword'  
+      redirectTo: 'http://localhost:5173/resetPassword' // TODO: change this for PROD
+    });
     if (error) {
       return res.status(400).json({ error: error.message });
     }
     res.json({ message: 'Password reset email sent' });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+app.post('/api/auth/reset-password-confirm', async (req, res) => {
+  const { token, newPassword } = req.body;
+  console.log("Received token:", token, "newPassword:", newPassword); // Debug log
+  if (!token || !newPassword) {
+    return res.status(400).json({ error: 'Token and new password are required' });
+  }
+  try {
+    // Decode the JWT to get the user ID and expiry
+    const decoded = jwt.decode(token);
+    if (!decoded || !decoded.sub || !decoded.exp) {
+      return res.status(400).json({ error: 'Invalid token' });
+    }
+    const userId = decoded.sub; // 'sub' is the user ID in Supabase JWTs
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (decoded.exp < currentTime) {
+      return res.status(400).json({ error: 'Token has expired' });
+    }
+
+    // Create a Supabase client with the service role key (admin privileges)
+    const supabaseAdmin = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_KEY
+    );
+
+    console.log("this is the user ID: ", userId);
+    console.log("PASSWORD: ", newPassword);
+
+    // Update the user's password directly
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, { password: newPassword });
+    if (error) {
+      console.error("Update user error:", error.message);
+      return res.status(400).json({ error: error.message });
+    }
+    res.json({ message: 'Password updated successfully' });
+  } catch (err) {
+    console.error("Unexpected server error:", err);
+    res.status(500).json({ error: err.message || 'Internal server error' });
   }
 });
 
@@ -318,4 +365,4 @@ app.get('/api/auth/session', async (req, res) => {
 });
 
 
-module.exports = app;
+// module.exports = app; 
