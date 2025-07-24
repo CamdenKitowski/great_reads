@@ -25,7 +25,7 @@ function EnterEmail() {
                 setMessage(data.message || "Password reset email sent. Check your inbox.");
                 setIsError(false);
                 // Optionally navigate back to login after success
-                setTimeout(() => navigate("/"), 2000);
+                setTimeout(() => navigate("/"), 3000);
             }
         } catch (err) {
             setMessage("An unexpected error occurred.");

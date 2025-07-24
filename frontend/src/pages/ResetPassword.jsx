@@ -47,7 +47,7 @@ function ResetPassword() {
             } else {
                 setMessage(data.message || "Password updated successfully. Redirecting to login...");
                 setIsError(false);
-                setTimeout(() => navigate("/"), 2000);
+                setTimeout(() => navigate("/"), 3000);
             }
         } catch (err) {
             console.error("Unexpected error in handleReset:", err);
