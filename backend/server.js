@@ -321,7 +321,7 @@ app.post('/api/auth/reset-password-confirm', async (req, res) => {
       return res.status(400).json({ error: 'Token has expired' });
     }
 
-    // Admin priveleges for supabase
+    // Admin privileges for supabase
     const supabaseAdmin = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_KEY
