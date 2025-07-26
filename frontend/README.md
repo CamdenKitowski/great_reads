@@ -1,4 +1,5 @@
-# Great Reads 
+# Great Reads <img width="16" height="16" alt="favicon" src="https://github.com/user-attachments/assets/88f14502-ae81-49aa-8f75-1dad1da0cd13" />
+
 **Website:** https://great-reads-bookshelf.vercel.app/
 
 ## Table of Contents
@@ -15,6 +16,8 @@ The project showcases a modern full-stack architecture with a React frontend and
 
 
 ## Features
+
+
 
 - **User Authentication**:
   - Sign up and log in with email and password using Supabase.
