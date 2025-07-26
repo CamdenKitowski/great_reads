@@ -1,7 +1,5 @@
 # Great Reads <img width="16" height="16" alt="favicon" src="https://github.com/user-attachments/assets/88f14502-ae81-49aa-8f75-1dad1da0cd13" />
 
-**Website:** https://great-reads-bookshelf.vercel.app/
-
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Features](#features)
@@ -14,6 +12,8 @@
 Great Reads is a web application designed for book enthusiasts to organize and track their reading journey. Users can create an account, search for books using the Open Library API, and manage personalized bookshelves for books they _want to read_, are _currently reading_, or have _completed_. Each book has a dedicated notes page for summaries or general notes, making it a consolidated location for tracking books and their respective notes.
 
 The project showcases a modern full-stack architecture with a React frontend and a Node.js backend, deployed seamlessly on Vercel. It emphasizes secure user authentication, efficient API integration, and a responsive UI.
+
+**Website:** https://great-reads-bookshelf.vercel.app/
 
 ## Features
 
@@ -78,7 +78,7 @@ Great Reads is a full-stack web application with a clear separation of concerns:
 
 Each bookshelf displays the books for that category, and each book has a dedicated notes page.
 
-<img width="1660" height="913" alt="Screenshot 2025-07-26 at 4 43 59 PM" src="https://github.com/user-attachments/assets/40cff59f-c8a4-467d-ae1e-8f2521df2f12" />
+<img width="1663" height="920" alt="Screenshot 2025-07-26 at 4 46 57 PM" src="https://github.com/user-attachments/assets/e41a9966-dea7-410e-85c1-57295e9b8c8b" />
 
 ## Why did I build this?
 As an avid reader, I wanted a consolidated, visually appealing solution to manage my reading lists and book notes. Previously, I tracked books that I want to read and have finished in an Excel spreadsheet, which became cluttered and unappealing. I also maintained notes and reflections for each book in a Google Document, but it grew long and disorganized. I needed a single, consolidated platform to organize my books and their corresponding notes privately. Inspired by Goodreads but frustrated by its lack of a dedicated, private notes section—offering only public comments or posts—I built Great Reads, a web application tailored to my needs as a passionate reader, providing a clean, intuitive interface to manage my reading journey and personal notes in one place.
