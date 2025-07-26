@@ -78,7 +78,7 @@ Great Reads is a full-stack web application with a clear separation of concerns:
 
 Each bookshelf displays the books for that category, and each book has a dedicated notes page.
 
-<img width="1655" height="790" alt="Screenshot 2025-07-26 at 3 35 28 PM" src="https://github.com/user-attachments/assets/5f96d076-b63c-4037-a550-1f76fede833e" />
+<img width="1660" height="913" alt="Screenshot 2025-07-26 at 4 43 59 PM" src="https://github.com/user-attachments/assets/40cff59f-c8a4-467d-ae1e-8f2521df2f12" />
 
 ## Why did I build this?
 As an avid reader, I wanted a consolidated, visually appealing solution to manage my reading lists and book notes. Previously, I tracked books that I want to read and have finished in an Excel spreadsheet, which became cluttered and unappealing. I also maintained notes and reflections for each book in a Google Document, but it grew long and disorganized. I needed a single, consolidated platform to organize my books and their corresponding notes privately. Inspired by Goodreads but frustrated by its lack of a dedicated, private notes section—offering only public comments or posts—I built Great Reads, a web application tailored to my needs as a passionate reader, providing a clean, intuitive interface to manage my reading journey and personal notes in one place.
