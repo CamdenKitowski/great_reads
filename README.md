@@ -7,7 +7,7 @@
 - [Features](#features)
 - [Architecture](#architecture)
 - [Usage](#usage)
-- [Why did I build this](#Why_did_I_build_this)
+- [Why did I build this](#Why-did-I-build-this)
 
 ## Project Overview
 
